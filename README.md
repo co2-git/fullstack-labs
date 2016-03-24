@@ -19,6 +19,8 @@ npm run build
 
 ## Start
 
+App will broadcast at port 3000 by default, but you can set a different port using a `PORT` environment variable.
+
 ```bash
 npm start
 ```
