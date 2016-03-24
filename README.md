@@ -1,6 +1,44 @@
 FullStack Labs - Coding Challenge
 ===
 
+# Install
+
+```bash
+npm install co2-git/fullstack-labs
+```
+
+# Build
+
+Build is automatic after installing. Yet you can invoke it again like this:
+
+```bash
+npm run build
+```
+
+# HTTP Server
+
+## Start
+
+```bash
+npm start
+```
+
+## Stop
+
+```bash
+npm stop
+```
+
+# Stack
+
+- `express-emitter` For HTTP server
+- `babel` For transpiling the app/ folder into ES5 in the dist/ folder
+- `webpack` For compiling assets
+- `bootstrap` For UI
+- `React` for Front-End
+
+===
+
 For this code challenge you will be building a web application with a simple set of features.  You can build the application using the following combinations of technologies.  You must choose one of the following from each level of the stack. (i.e Rails/Ember/Bootstrap).  You can include other technologies that you think will be useful to you but this will factor into our assessment of the overall project as well.
 
 Acceptable stack:
