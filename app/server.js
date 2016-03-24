@@ -6,6 +6,7 @@
 
 import path from 'path';
 import Server from 'express-emitter';
+import express from 'express';
 
 const server = new Server(app => {
   //----------------------------------------------------------------------------// Express Configuration
@@ -21,7 +22,11 @@ const server = new Server(app => {
 
     .get('/', (req, res) =>
       res.sendFile(path.resolve(__dirname, '../index.html'))
-    );
+    )
+
+    // Static assets
+
+    .use('/bower_components/', express.static('bower_components/'));
 })
 
   //----------------------------------------------------------------------------

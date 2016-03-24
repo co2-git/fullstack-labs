@@ -12,6 +12,10 @@ var _expressEmitter = require('express-emitter');
 
 var _expressEmitter2 = _interopRequireDefault(_expressEmitter);
 
+var _express = require('express');
+
+var _express2 = _interopRequireDefault(_express);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var server = new _expressEmitter2.default(function (app) {
@@ -28,7 +32,11 @@ var server = new _expressEmitter2.default(function (app) {
 
   .get('/', function (req, res) {
     return res.sendFile(_path2.default.resolve(__dirname, '../index.html'));
-  });
+  })
+
+  // Static assets
+
+  .use('/bower_components/', _express2.default.static('bower_components/'));
 })
 
 //----------------------------------------------------------------------------
