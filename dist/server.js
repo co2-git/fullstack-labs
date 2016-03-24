@@ -36,7 +36,7 @@ var server = new _expressEmitter2.default(function (app) {
 
   // Static assets
 
-  .use('/bower_components/', _express2.default.static('bower_components/'));
+  .use('/bower_components/', _express2.default.static('bower_components/')).use('/assets/', _express2.default.static('assets/'));
 })
 
 //----------------------------------------------------------------------------

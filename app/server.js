@@ -26,7 +26,9 @@ const server = new Server(app => {
 
     // Static assets
 
-    .use('/bower_components/', express.static('bower_components/'));
+    .use('/bower_components/', express.static('bower_components/'))
+
+    .use('/assets/', express.static('assets/'));
 })
 
   //----------------------------------------------------------------------------
