@@ -14,6 +14,10 @@ var _stepBar = require('./step-bar');
 
 var _stepBar2 = _interopRequireDefault(_stepBar);
 
+var _household = require('./household');
+
+var _household2 = _interopRequireDefault(_household);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -50,7 +54,8 @@ var App = function (_React$Component) {
       return _react2.default.createElement(
         'div',
         null,
-        _react2.default.createElement(_stepBar2.default, { step: step })
+        _react2.default.createElement(_stepBar2.default, { step: step }),
+        _react2.default.createElement(_household2.default, null)
       );
     }
   }]);

@@ -2,6 +2,7 @@
 
 import React              from 'react';
 import StepBar            from './step-bar';
+import HouseHold          from './household';
 
 class App extends React.Component {
 
@@ -15,6 +16,8 @@ class App extends React.Component {
     return (
       <div>
         <StepBar step={ step } />
+
+        <HouseHold />
       </div>
     );
   }
