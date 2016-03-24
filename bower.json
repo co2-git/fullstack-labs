@@ -1,0 +1,22 @@
+{
+  "name": "fullstack-labs",
+  "description": "FullStack Labs - Coding Challenge",
+  "main": "dist/server.js",
+  "authors": [
+    "francoisrvespa@gmail.com"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/co2-git/fullstack-labs",
+  "moduleType": [],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.6"
+  }
+}

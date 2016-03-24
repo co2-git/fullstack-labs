@@ -37,6 +37,14 @@ npm start
 
 For this example and for simplicity's sake, I am **not** using isomorphic React - just React on the Front-End.
 
+## Bower
+
+We use Bower to handle assets management.
+
+## Bootstrap
+
+Also for simplicity reasons, we use the full version of Bootstrap instead of using a custom build.
+
 ===
 
 For this code challenge you will be building a web application with a simple set of features.  You can build the application using the following combinations of technologies.  You must choose one of the following from each level of the stack. (i.e Rails/Ember/Bootstrap).  You can include other technologies that you think will be useful to you but this will factor into our assessment of the overall project as well.
