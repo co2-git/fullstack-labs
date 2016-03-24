@@ -30,49 +30,48 @@ var StepBar = function (_React$Component) {
   _createClass(StepBar, [{
     key: 'render',
     value: function render() {
+      var _this2 = this;
+
+      var steps = this.props.steps;
+
+
+      var content = steps.map(function (step, index) {
+        var stepIndex = index + 1;
+
+        var args = {
+          key: index,
+          role: 'presentation'
+        };
+
+        if (index === _this2.props.step) {
+          args.className = 'active';
+        }
+
+        return _react2.default.createElement(
+          'li',
+          args,
+          _react2.default.createElement(
+            'a',
+            { href: '' },
+            _react2.default.createElement(
+              'span',
+              { className: 'badge' },
+              stepIndex
+            ),
+            _react2.default.createElement(
+              'span',
+              null,
+              ' ',
+              step.label
+            )
+          )
+        );
+      });
+
       return _react2.default.createElement(
-        'div',
-        { className: 'row' },
-        _react2.default.createElement(
-          'div',
-          { className: 'col-xs-3 text-center' },
-          _react2.default.createElement(
-            'span',
-            { className: 'badge' },
-            '1'
-          ),
-          ' Your household'
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'col-xs-3 text-center' },
-          _react2.default.createElement(
-            'span',
-            { className: 'badge' },
-            '2'
-          ),
-          ' People in your household'
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'col-xs-3 text-center' },
-          _react2.default.createElement(
-            'span',
-            { className: 'badge' },
-            '3'
-          ),
-          ' Cars in your household'
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'col-xs-3 text-center' },
-          _react2.default.createElement(
-            'span',
-            { className: 'badge' },
-            '4'
-          ),
-          ' Summary'
-        )
+        'ul',
+        { className: 'nav nav-pills', role: 'tablist' },
+        content
       );
     }
   }]);

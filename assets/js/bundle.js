@@ -19687,6 +19687,10 @@
 
 	var _household2 = _interopRequireDefault(_household);
 
+	var _people = __webpack_require__(162);
+
+	var _people2 = _interopRequireDefault(_people);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -19694,6 +19698,18 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var steps = [{
+	  label: 'Your household',
+	  view: _household2.default
+	}, {
+	  label: 'People in your household',
+	  view: _people2.default
+	}, {
+	  label: 'Your cars'
+	}, {
+	  label: 'Summary'
+	}];
 
 	var App = function (_React$Component) {
 	  _inherits(App, _React$Component);
@@ -19715,16 +19731,83 @@
 	  }
 
 	  _createClass(App, [{
+	    key: 'nextHandler',
+	    value: function nextHandler(e) {
+	      var step = this.state.step;
+
+	      var next = step + 1;
+
+	      if (steps[next]) {
+	        this.setState({ step: next });
+	      }
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var step = this.state.step;
 
 
+	      var next = step + 1;
+
+	      var View = steps[step].view;
+
+	      var footer = void 0;
+
+	      if (steps[next]) {
+	        footer = _react2.default.createElement(
+	          'div',
+	          null,
+	          _react2.default.createElement(
+	            'button',
+	            { onClick: this.nextHandler.bind(this) },
+	            _react2.default.createElement('span', {
+	              className: 'glyphicon glyphicon-menu-right',
+	              'aria-hidden': 'true'
+	            }),
+	            'Next step'
+	          ),
+	          _react2.default.createElement(
+	            'span',
+	            null,
+	            ' '
+	          ),
+	          _react2.default.createElement(
+	            'span',
+	            { className: 'label label-info' },
+	            steps[next].label
+	          )
+	        );
+	      }
+
 	      return _react2.default.createElement(
 	        'div',
 	        null,
-	        _react2.default.createElement(_stepBar2.default, { step: step }),
-	        _react2.default.createElement(_household2.default, null)
+	        _react2.default.createElement(_stepBar2.default, { steps: steps, step: step }),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'panel panel-default', style: { margin: 80 } },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'panel-heading' },
+	            _react2.default.createElement(
+	              'span',
+	              { className: 'badge' },
+	              next
+	            ),
+	            ' ',
+	            steps[step].label
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'panel-body' },
+	            _react2.default.createElement(View, null)
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'panel-footer text-right' },
+	            footer
+	          )
+	        )
 	      );
 	    }
 	  }]);
@@ -19770,49 +19853,48 @@
 	  _createClass(StepBar, [{
 	    key: 'render',
 	    value: function render() {
+	      var _this2 = this;
+
+	      var steps = this.props.steps;
+
+
+	      var content = steps.map(function (step, index) {
+	        var stepIndex = index + 1;
+
+	        var args = {
+	          key: index,
+	          role: 'presentation'
+	        };
+
+	        if (index === _this2.props.step) {
+	          args.className = 'active';
+	        }
+
+	        return _react2.default.createElement(
+	          'li',
+	          args,
+	          _react2.default.createElement(
+	            'a',
+	            { href: '' },
+	            _react2.default.createElement(
+	              'span',
+	              { className: 'badge' },
+	              stepIndex
+	            ),
+	            _react2.default.createElement(
+	              'span',
+	              null,
+	              ' ',
+	              step.label
+	            )
+	          )
+	        );
+	      });
+
 	      return _react2.default.createElement(
-	        'div',
-	        { className: 'row' },
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'col-xs-3 text-center' },
-	          _react2.default.createElement(
-	            'span',
-	            { className: 'badge' },
-	            '1'
-	          ),
-	          ' Your household'
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'col-xs-3 text-center' },
-	          _react2.default.createElement(
-	            'span',
-	            { className: 'badge' },
-	            '2'
-	          ),
-	          ' People in your household'
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'col-xs-3 text-center' },
-	          _react2.default.createElement(
-	            'span',
-	            { className: 'badge' },
-	            '3'
-	          ),
-	          ' Cars in your household'
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'col-xs-3 text-center' },
-	          _react2.default.createElement(
-	            'span',
-	            { className: 'badge' },
-	            '4'
-	          ),
-	          ' Summary'
-	        )
+	        'ul',
+	        { className: 'nav nav-pills', role: 'tablist' },
+	        content
 	      );
 	    }
 	  }]);
@@ -19967,6 +20049,162 @@
 	}(_react2.default.Component);
 
 	exports.default = HouseHold;
+
+/***/ },
+/* 162 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var People = function (_React$Component) {
+	  _inherits(People, _React$Component);
+
+	  function People() {
+	    _classCallCheck(this, People);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(People).apply(this, arguments));
+	  }
+
+	  _createClass(People, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'form',
+	        { className: 'form-horizontal' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'form-group' },
+	          _react2.default.createElement(
+	            'label',
+	            { htmlFor: 'first_name', className: 'col-xs-2 control-label' },
+	            'First name'
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'col-xs-10' },
+	            _react2.default.createElement('input', {
+	              type: 'text',
+	              name: 'first_name',
+	              placeholder: 'First name',
+	              className: 'form-control'
+	            })
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'form-group' },
+	          _react2.default.createElement(
+	            'label',
+	            { htmlFor: 'last_name', className: 'col-xs-2 control-label' },
+	            'Last name'
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'col-xs-10' },
+	            _react2.default.createElement('input', {
+	              type: 'text',
+	              name: 'last_name',
+	              placeholder: 'Last name',
+	              className: 'form-control'
+	            })
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'form-group' },
+	          _react2.default.createElement(
+	            'label',
+	            { htmlFor: 'email', className: 'col-xs-2 control-label' },
+	            'Email'
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'col-xs-10' },
+	            _react2.default.createElement('input', {
+	              type: 'email',
+	              name: 'email',
+	              placeholder: 'Email',
+	              className: 'form-control'
+	            })
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'form-group' },
+	          _react2.default.createElement(
+	            'label',
+	            { htmlFor: 'age', className: 'col-xs-2 control-label' },
+	            'Age'
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'col-xs-10' },
+	            _react2.default.createElement('input', {
+	              type: 'number',
+	              name: 'age',
+	              placeholder: 'Age',
+	              className: 'form-control'
+	            })
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'form-group' },
+	          _react2.default.createElement(
+	            'label',
+	            { htmlFor: 'gender', className: 'col-xs-2 control-label' },
+	            'Gender'
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'col-xs-10' },
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'btn-group', role: 'group', 'aria-label': '...' },
+	              _react2.default.createElement(
+	                'button',
+	                { type: 'button', className: 'btn btn-default' },
+	                'Male'
+	              ),
+	              _react2.default.createElement(
+	                'button',
+	                { type: 'button', className: 'btn btn-default' },
+	                'Female'
+	              ),
+	              _react2.default.createElement(
+	                'button',
+	                { type: 'button', className: 'btn btn-default' },
+	                'Other'
+	              )
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return People;
+	}(_react2.default.Component);
+
+	exports.default = People;
 
 /***/ }
 /******/ ]);

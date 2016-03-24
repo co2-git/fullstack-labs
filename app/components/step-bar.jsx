@@ -4,24 +4,34 @@ import React from 'react';
 
 class StepBar extends React.Component {
   render () {
+    const { steps } = this.props;
+
+    const content = steps.map((step, index) => {
+      const stepIndex = index + 1;
+
+      const args = {
+        key     :   index,
+        role    :   'presentation'
+      };
+
+      if ( index === this.props.step ) {
+        args.className = 'active';
+      }
+
+      return (
+        <li { ...args }>
+          <a href="">
+            <span className="badge">{ stepIndex }</span>
+            <span> { step.label }</span>
+          </a>
+        </li>
+      );
+    });
+
     return (
-      <div className="row">
-        <div className="col-xs-3 text-center">
-          <span className="badge">1</span> Your household
-        </div>
-
-        <div className="col-xs-3 text-center">
-          <span className="badge">2</span> People in your household
-        </div>
-
-        <div className="col-xs-3 text-center">
-          <span className="badge">3</span> Cars in your household
-        </div>
-
-        <div className="col-xs-3 text-center">
-          <span className="badge">4</span> Summary
-        </div>
-      </div>
+      <ul className="nav nav-pills" role="tablist">
+        { content }
+      </ul>
     );
   }
 }
