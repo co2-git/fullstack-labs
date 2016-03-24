@@ -10,10 +10,6 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _stepBar = require('./step-bar');
-
-var _stepBar2 = _interopRequireDefault(_stepBar);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -22,40 +18,66 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var App = function (_React$Component) {
-  _inherits(App, _React$Component);
+var StepBar = function (_React$Component) {
+  _inherits(StepBar, _React$Component);
 
-  function App() {
-    var _Object$getPrototypeO;
+  function StepBar() {
+    _classCallCheck(this, StepBar);
 
-    var _temp, _this, _ret;
-
-    _classCallCheck(this, App);
-
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(App)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.state = {
-      step: 0
-    }, _temp), _possibleConstructorReturn(_this, _ret);
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(StepBar).apply(this, arguments));
   }
 
-  _createClass(App, [{
+  _createClass(StepBar, [{
     key: 'render',
     value: function render() {
-      var step = this.state.step;
-
-
       return _react2.default.createElement(
         'div',
-        null,
-        _react2.default.createElement(_stepBar2.default, { step: step })
+        { className: 'row' },
+        _react2.default.createElement(
+          'div',
+          { className: 'col-xs-3 text-center' },
+          _react2.default.createElement(
+            'span',
+            { className: 'badge' },
+            '1'
+          ),
+          ' Your household'
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'col-xs-3 text-center' },
+          _react2.default.createElement(
+            'span',
+            { className: 'badge' },
+            '2'
+          ),
+          ' People in your household'
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'col-xs-3 text-center' },
+          _react2.default.createElement(
+            'span',
+            { className: 'badge' },
+            '3'
+          ),
+          ' Cars in your household'
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'col-xs-3 text-center' },
+          _react2.default.createElement(
+            'span',
+            { className: 'badge' },
+            '4'
+          ),
+          ' Summary'
+        )
       );
     }
   }]);
 
-  return App;
+  return StepBar;
 }(_react2.default.Component);
 
-exports.default = App;
+exports.default = StepBar;
