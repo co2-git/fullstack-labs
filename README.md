@@ -17,18 +17,10 @@ npm run build
 
 # HTTP Server
 
-## Start
-
 App will broadcast at port 3000 by default, but you can set a different port using a `PORT` environment variable.
 
 ```bash
 npm start
-```
-
-## Stop
-
-```bash
-npm stop
 ```
 
 # Stack
@@ -38,6 +30,12 @@ npm stop
 - `webpack` For compiling assets
 - `bootstrap` For UI
 - `React` for Front-End
+
+# Note
+
+## React
+
+For this example and for simplicity's sake, I am **not** using isomorphic React - just React on the Front-End.
 
 ===
 

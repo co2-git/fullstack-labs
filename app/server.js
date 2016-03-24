@@ -1,5 +1,10 @@
 'use strict';
 
+/*    FullStack Labs | HTTP Server
+ *
+ */
+
+import path from 'path';
 import Server from 'express-emitter';
 
 const server = new Server(app => {
@@ -14,7 +19,9 @@ const server = new Server(app => {
 
     // Test route
 
-    .get('/', (req, res) => res.send('Hello world!'));
+    .get('/', (req, res) =>
+      res.sendFile(path.resolve(__dirname, '../index.html'))
+    );
 })
 
   //----------------------------------------------------------------------------

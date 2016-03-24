@@ -1,5 +1,13 @@
 'use strict';
 
+/*    FullStack Labs | HTTP Server
+ *
+ */
+
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
 var _expressEmitter = require('express-emitter');
 
 var _expressEmitter2 = _interopRequireDefault(_expressEmitter);
@@ -19,7 +27,7 @@ var server = new _expressEmitter2.default(function (app) {
   // Test route
 
   .get('/', function (req, res) {
-    return res.send('Hello world!');
+    return res.sendFile(_path2.default.resolve(__dirname, '../index.html'));
   });
 })
 
