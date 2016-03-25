@@ -34,6 +34,12 @@ const steps = [
 
 class App extends React.Component {
 
+  data = {
+    household : {
+      address : null
+    }
+  };
+
   state = {
     step : 0
   };
@@ -53,6 +59,10 @@ class App extends React.Component {
     }
 
     this.setState({ step });
+  }
+
+  changeHandler (domain, section, value) {
+    window.socket.emit('changeData', domain, section, value);
   }
 
   render () {
@@ -117,7 +127,7 @@ class App extends React.Component {
             </div>
 
             <div className="panel-body">
-              <View />
+              <View { ...this.data } onChange={ ::this.changeHandler } />
             </div>
 
             <div className="panel-footer text-right">

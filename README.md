@@ -45,11 +45,15 @@ We use Bower to handle assets management.
 
 Also for simplicity reasons, we use the full version of Bootstrap instead of using a custom build.
 
-# Auth
+# Database
 
-## Database
+## Users
 
 I've put up a small database system for users. It stores users in `/User.json`.
+
+## User Data
+
+I use RAM to store user data.
 
 ===
 

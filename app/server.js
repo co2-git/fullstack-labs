@@ -10,6 +10,8 @@ import Server             from 'express-emitter';
 import express            from 'express';
 import cookieParser       from 'cookie-parser';
 import bodyParser         from 'body-parser';
+import WebRockets         from 'web-rockets';
+import WebRocketsCookie   from 'web-rockets-cookie';
 import User               from './models/user';
 import signIn             from './routes/sign-in';
 import signOut            from './routes/sign-out';
@@ -123,4 +125,76 @@ const server = new Server(app => {
 
   .on('listening', () => {
     console.log('Server is listening', server.app.get('port'));
+
+    //--------------------------------------------------------------------------
+    // Web Sockets
+    //--------------------------------------------------------------------------
+
+    const rockets = new WebRockets(server.server);
+
+    rockets.users = [];
+
+    const findSocketUser = user => {
+      return rockets.users.reduce(
+        (match, socketUser) => {
+          if ( socketUser.email === user.email ) {
+            match = socketUser;
+          }
+          return match;
+        },
+        null
+      );
+    };
+
+    rockets
+      .on('error', server.emit.bind(server, 'error'))
+
+      .on('listening', () => console.log('Web Sockets up!'))
+
+      // Identify socket user by cookie
+
+      .use(WebRocketsCookie('fullStack12345', false, (cookie, socket, next) => {
+        if ( ! cookie ) {
+          return next();
+        }
+
+        User
+          .find(cookie)
+          .then(users => {
+            const [ user ] = users;
+            socket.user = user;
+
+            const socketUser = findSocketUser(user);
+
+            if ( ! socketUser ) {
+              rockets.users.push(Object.assign(user, {
+                data : {
+                  household : {
+                    address : null
+                  }
+                }
+              }));
+            }
+
+            next();
+          })
+          .catch(next);
+      }))
+
+      .use((socket, next) => {
+        socket.emit('user', findSocketUser(socket.user));
+        next();
+      })
+
+      .listen('changeData', (socket, domain, section, value) => {
+        const socketUser = findSocketUser(socket.user);
+
+        socketUser.data[domain][section] = value;
+      });
   })
+
+  //----------------------------------------------------------------------------
+  // On server error
+  //----------------------------------------------------------------------------
+
+  .on('error', error => console.log(error.stack));

@@ -10,6 +10,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reactDom = require('react-dom');
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -28,8 +32,17 @@ var HouseHold = function (_React$Component) {
   }
 
   _createClass(HouseHold, [{
+    key: 'updateHandler',
+    value: function updateHandler(section) {
+      var input = _reactDom2.default.findDOMNode(this.refs[section]);
+      this.props.onChange('household', section, input.value);
+    }
+  }, {
     key: 'render',
     value: function render() {
+      var household = this.props.household;
+
+
       return _react2.default.createElement(
         'form',
         { className: 'form-horizontal' },
@@ -47,8 +60,11 @@ var HouseHold = function (_React$Component) {
             _react2.default.createElement('input', {
               type: 'text',
               name: 'address',
+              ref: 'address',
               placeholder: 'Your address',
-              className: 'form-control'
+              className: 'form-control',
+              defaultValue: household.address,
+              onChange: this.updateHandler.bind(this, 'address')
             })
           )
         ),

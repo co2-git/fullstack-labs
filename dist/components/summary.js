@@ -30,6 +30,9 @@ var Summary = function (_React$Component) {
   _createClass(Summary, [{
     key: 'render',
     value: function render() {
+      var household = this.props.household;
+
+
       return _react2.default.createElement(
         'div',
         null,
@@ -64,7 +67,7 @@ var Summary = function (_React$Component) {
               _react2.default.createElement(
                 'div',
                 { className: 'col-xs-8' },
-                '-Address-'
+                household.address
               )
             ),
             _react2.default.createElement(

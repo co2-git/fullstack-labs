@@ -2,7 +2,7 @@
 
 function setCookieUser (req, res, next) {
   res.cookie('fullStack12345',
-    { id: req.user._id },
+    req.user,
     {
       "path"      :   "/",
       "signed"    :   false,

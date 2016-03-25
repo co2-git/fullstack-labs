@@ -4,6 +4,8 @@ import React from 'react';
 
 class Summary extends React.Component {
   render () {
+    const { household } = this.props;
+
     return (
       <div>
         <div className="panel panel-default">
@@ -19,7 +21,7 @@ class Summary extends React.Component {
               </div>
 
               <div className="col-xs-8">
-                -Address-
+                { household.address }
               </div>
             </div>
 
@@ -72,7 +74,7 @@ class Summary extends React.Component {
           </div>
 
           <div className="panel-body">
-            
+
           </div>
         </div>
       </div>

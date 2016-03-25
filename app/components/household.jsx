@@ -1,9 +1,17 @@
 'use strict';
 
 import React from 'react';
+import ReactDOM from 'react-dom';
 
 class HouseHold extends React.Component {
+  updateHandler (section) {
+    const input = ReactDOM.findDOMNode(this.refs[section]);
+    this.props.onChange('household', section, input.value);
+  }
+
   render () {
+    const { household } = this.props;
+
     return (
       <form className="form-horizontal">
         <div className="form-group">
@@ -15,8 +23,11 @@ class HouseHold extends React.Component {
             <input
               type            =   "text"
               name            =   "address"
+              ref             =   "address"
               placeholder     =   "Your address"
               className       =   "form-control"
+              defaultValue    =   { household.address }
+              onChange        =   { this.updateHandler.bind(this, 'address') }
             />
           </div>
         </div>
