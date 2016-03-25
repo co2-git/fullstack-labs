@@ -1,5 +1,9 @@
 'use strict';
 
+/*    App - Main Component + Store
+ *
+ */
+
 import React              from 'react';
 import superagent         from 'superagent';
 import Link               from 'reacted-link';
@@ -7,12 +11,14 @@ import TopBar             from './top-bar';
 import OptIn              from './opt-in';
 import StepBar            from './step-bar';
 import HouseHold          from './household';
-import People             from './people';
+import Persons            from './persons';
 import Cars               from './cars';
 import Summary            from './summary';
 import household          from '../../data/household.json';
 import person             from '../../data/person.json';
 import cars               from '../../data/cars.json';
+
+// The steps
 
 const steps = [
   {
@@ -22,7 +28,7 @@ const steps = [
 
   {
     label : 'People in your household',
-    view : People
+    view : Persons
   },
 
   {
@@ -38,18 +44,27 @@ const steps = [
 
 class App extends React.Component {
 
+  // User data - handed by the socket server
+  // Data is detached from state because we use uncontrolled elements
+
   data = {
     household,
     persons : [person]
   };
 
   state = {
-    step : 0,
-    changed : 0
+    // current step
+    step      :   0,
+    // trigger state changes on data change
+    changed   :   0
   };
+
+  // Constuctor
 
   constructor (props) {
     super(props);
+
+    // If step is declared in location, use that in state
 
     const paths = this.props.path.split(/\//);
 
@@ -58,12 +73,17 @@ class App extends React.Component {
     }
   }
 
+  // Get user's data from sockets server
+
   componentDidMount () {
     window.socket.emit('getData', data => {
       this.data = data;
+      console.log('got data from be', data);
       this.setState({ changed : ++this.state.changed });
     });
   }
+
+  // Move to next step
 
   nextHandler (e) {
     const { step } = this.state;
@@ -73,6 +93,8 @@ class App extends React.Component {
       this.stepHandler(next);
     }
   }
+
+  // Update state + location with new step
 
   stepHandler (step, e) {
     if ( e ) {
@@ -84,12 +106,18 @@ class App extends React.Component {
     Link.go(`/step/${step}`);
   }
 
-  changeHandler (domain, section, value) {
-    window.socket.emit('changeData', domain, section, value);
+  // Pass data changes to socket server
+
+  changeHandler (domain, section, value, index) {
+    window.socket.emit('changeData', domain, section, value, index);
   }
+
+  // View
 
   render () {
     const { user } = this.props;
+
+    // If user not logged in, go to opt-in page
 
     if ( ! user ) {
       return (

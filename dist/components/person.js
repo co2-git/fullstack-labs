@@ -26,9 +26,19 @@ var Person = function (_React$Component) {
   _inherits(Person, _React$Component);
 
   function Person() {
+    var _Object$getPrototypeO;
+
+    var _temp, _this, _ret;
+
     _classCallCheck(this, Person);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(Person).apply(this, arguments));
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(Person)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.state = {
+      gender: null
+    }, _temp), _possibleConstructorReturn(_this, _ret);
   }
 
   _createClass(Person, [{
@@ -42,6 +52,11 @@ var Person = function (_React$Component) {
       this.syncView();
     }
   }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(props) {
+      this.setState({ gender: props.person.gender });
+    }
+  }, {
     key: 'syncView',
     value: function syncView() {
       var person = this.props.person;
@@ -50,18 +65,26 @@ var Person = function (_React$Component) {
       console.warn(person);
 
       for (var section in person) {
-        _reactDom2.default.findDOMNode(this.refs[section]).value = person[section];
+        if (section === 'gender') {} else {
+          _reactDom2.default.findDOMNode(this.refs[section]).value = person[section];
+        }
       }
     }
   }, {
     key: 'changeHandler',
-    value: function changeHandler(section) {
+    value: function changeHandler(section, value) {
       var index = this.props.index;
 
-      var value = _reactDom2.default.findDOMNode(this.refs[section]).value;
-      console.log({ index: index, section: section, value: value });
+
+      if (!value) {
+        value = _reactDom2.default.findDOMNode(this.refs[section]).value;
+      }
 
       this.props.updateHandler(section, value, index);
+
+      if (section === 'gender') {
+        this.setState({ gender: value });
+      }
     }
   }, {
     key: 'render',
@@ -76,6 +99,12 @@ var Person = function (_React$Component) {
       if (!active) {
         style.display = 'none';
       }
+
+      var gender = {
+        male: this.state.gender === 'male' ? 'primary' : 'default',
+        female: this.state.gender === 'female' ? 'primary' : 'default',
+        other: this.state.gender === 'other' ? 'primary' : 'default'
+      };
 
       return _react2.default.createElement(
         'div',
@@ -180,17 +209,29 @@ var Person = function (_React$Component) {
               { className: 'btn-group', role: 'group', 'aria-label': '...' },
               _react2.default.createElement(
                 'button',
-                { type: 'button', className: 'btn btn-default' },
+                {
+                  type: 'button',
+                  className: 'btn btn-' + gender.male,
+                  onClick: this.changeHandler.bind(this, 'gender', 'male')
+                },
                 'Male'
               ),
               _react2.default.createElement(
                 'button',
-                { type: 'button', className: 'btn btn-default' },
+                {
+                  type: 'button',
+                  className: 'btn btn-' + gender.female,
+                  onClick: this.changeHandler.bind(this, 'gender', 'female')
+                },
                 'Female'
               ),
               _react2.default.createElement(
                 'button',
-                { type: 'button', className: 'btn btn-default' },
+                {
+                  type: 'button',
+                  className: 'btn btn-' + gender.other,
+                  onClick: this.changeHandler.bind(this, 'gender', 'other')
+                },
                 'Other'
               )
             )
@@ -203,140 +244,4 @@ var Person = function (_React$Component) {
   return Person;
 }(_react2.default.Component);
 
-var People = function (_React$Component2) {
-  _inherits(People, _React$Component2);
-
-  //----------------------------------------------------------------------------
-
-  function People(props) {
-    _classCallCheck(this, People);
-
-    var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(People).call(this, props));
-
-    _this2.state = {
-      people: [],
-      person: 0
-    };
-
-
-    _this2.state.people = _this2.props.persons;
-    return _this2;
-  }
-
-  //----------------------------------------------------------------------------
-
-  //----------------------------------------------------------------------------
-
-  _createClass(People, [{
-    key: 'componentWillReceiveProps',
-    value: function componentWillReceiveProps(props) {
-      this.setState({ people: props.persons });
-    }
-
-    //----------------------------------------------------------------------------
-
-  }, {
-    key: 'addPerson',
-    value: function addPerson() {
-      var people = this.state.people;
-
-
-      people.push(Object.assign({}, person));
-
-      this.setState({ people: people, person: people.length - 1 });
-    }
-
-    //----------------------------------------------------------------------------
-
-  }, {
-    key: 'viewPerson',
-    value: function viewPerson(person, e) {
-      e.preventDefault();
-
-      this.setState({ person: person });
-    }
-
-    //----------------------------------------------------------------------------
-
-  }, {
-    key: 'updateHandler',
-    value: function updateHandler(section, value, index) {
-      this.props.onChange('persons', section, value, index);
-    }
-
-    //----------------------------------------------------------------------------
-
-  }, {
-    key: 'render',
-    value: function render() {
-      var _this3 = this;
-
-      var people = this.state.people.map(function (people, index) {
-        if (index === _this3.state.person) {
-          return _react2.default.createElement(
-            'li',
-            { key: index, className: 'active' },
-            'Person #',
-            index + 1
-          );
-        } else {
-          return _react2.default.createElement(
-            'li',
-            { key: index },
-            _react2.default.createElement(
-              'a',
-              {
-                href: '#',
-                onClick: _this3.viewPerson.bind(_this3, index)
-              },
-              'Person #',
-              index + 1
-            )
-          );
-        }
-      });
-
-      var persons = this.state.people.map(function (people, index) {
-        return _react2.default.createElement(Person, {
-          person: people,
-          active: index === _this3.state.person,
-          key: index,
-          updateHandler: _this3.updateHandler.bind(_this3),
-          index: index
-        });
-      });
-
-      return _react2.default.createElement(
-        'div',
-        null,
-        _react2.default.createElement(
-          'ol',
-          { className: 'breadcrumb' },
-          people,
-          _react2.default.createElement(
-            'li',
-            null,
-            _react2.default.createElement(
-              'span',
-              {
-                className: 'badge',
-                onClick: this.addPerson.bind(this),
-                style: { cursor: 'pointer' }
-              },
-              '+'
-            )
-          )
-        ),
-        _react2.default.createElement(
-          'form',
-          { className: 'form-horizontal' },
-          persons
-        )
-      );
-    }
-  }]);
-
-  return People;
-}(_react2.default.Component);
-
-exports.default = People;
+exports.default = Person;

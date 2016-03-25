@@ -191,39 +191,89 @@ var server = new _expressEmitter2.default(function (app) {
     return console.log('Web Sockets up!');
   })
 
-  // Identify socket user by cookie
+  // Get user cookie if exists
 
   .use((0, _webRocketsCookie2.default)('fullStack12345', false, function (cookie, socket, next) {
+
+    // No cookie? Keeps on going
+
     if (!cookie) {
       return next();
     }
+
+    // Find user matching cookie in Users DB
 
     _user2.default.find(cookie).then(function (users) {
       var _users2 = _slicedToArray(users, 1);
 
       var user = _users2[0];
 
+
       socket.user = user;
 
       var socketUser = findSocketUser(user);
+
+      // If user not in RAM DB, then add them
 
       if (!socketUser) {
         rockets.users.push(Object.assign(user, {
           data: {
             household: _household2.default,
-            persons: [_person2.default]
+            persons: [Object.assign({}, _person2.default)]
           }
         }));
       }
 
       next();
     }).catch(next);
-  })).listen('getData', function (socket, cb) {
+  })).use(function (socket, next) {
+    console.log('-----------------------------------------------------');
+    console.log(require('util').inspect(rockets.users, { depth: null }));
+    console.log('-----------------------------------------------------');
+
+    // catch errors
+
+    socket.on('error', function (error) {
+      return console.log(error.stack);
+    });
+    next();
+  })
+
+  // Hand data to client
+
+  .listen('getData', function (socket, cb) {
     cb(findSocketUser(socket.user).data);
-  }).listen('changeData', function (socket, domain, section, value) {
+  })
+
+  // Save data changes
+
+  .listen('changeData', function (socket, domain, section, value, index) {
     var socketUser = findSocketUser(socket.user);
 
-    socketUser.data[domain][section] = value;
+    console.log('changeData', { domain: domain, section: section, value: value, index: index });
+
+    // if index is set, than data is an array
+
+    if (typeof index === 'number') {
+
+      // if no such item in array, then create it
+
+      if (!socketUser.data[domain][index]) {
+        if (domain === 'persons') {
+          socketUser.data[domain][index] = Object.assign({}, _person2.default);
+        }
+      }
+
+      // update data
+
+      socketUser.data[domain][index][section] = value;
+
+      console.log('......................................');
+      console.log(socketUser.data[domain]);
+      console.log('......................................');
+    } else {
+      socketUser.data[domain][section] = value;
+    }
   });
 })
 

@@ -1,5 +1,9 @@
 'use strict';
 
+/*    App - Main Component + Store
+ *
+ */
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -36,9 +40,9 @@ var _household = require('./household');
 
 var _household2 = _interopRequireDefault(_household);
 
-var _people = require('./people');
+var _persons = require('./persons');
 
-var _people2 = _interopRequireDefault(_people);
+var _persons2 = _interopRequireDefault(_persons);
 
 var _cars = require('./cars');
 
@@ -68,12 +72,14 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+// The steps
+
 var steps = [{
   label: 'Your household',
   view: _household2.default
 }, {
   label: 'People in your household',
-  view: _people2.default
+  view: _persons2.default
 }, {
   label: 'Your cars',
   view: _cars2.default
@@ -85,8 +91,15 @@ var steps = [{
 var App = function (_React$Component) {
   _inherits(App, _React$Component);
 
+  // Constuctor
+
+  // User data - handed by the socket server
+  // Data is detached from state because we use uncontrolled elements
+
   function App(props) {
     _classCallCheck(this, App);
+
+    // If step is declared in location, use that in state
 
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(App).call(this, props));
 
@@ -95,11 +108,11 @@ var App = function (_React$Component) {
       persons: [_person2.default]
     };
     _this.state = {
+      // current step
       step: 0,
+      // trigger state changes on data change
       changed: 0
     };
-
-
     var paths = _this.props.path.split(/\//);
 
     if (paths[2]) {
@@ -108,6 +121,8 @@ var App = function (_React$Component) {
     return _this;
   }
 
+  // Get user's data from sockets server
+
   _createClass(App, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
@@ -115,9 +130,13 @@ var App = function (_React$Component) {
 
       window.socket.emit('getData', function (data) {
         _this2.data = data;
+        console.log('got data from be', data);
         _this2.setState({ changed: ++_this2.state.changed });
       });
     }
+
+    // Move to next step
+
   }, {
     key: 'nextHandler',
     value: function nextHandler(e) {
@@ -129,6 +148,9 @@ var App = function (_React$Component) {
         this.stepHandler(next);
       }
     }
+
+    // Update state + location with new step
+
   }, {
     key: 'stepHandler',
     value: function stepHandler(step, e) {
@@ -140,16 +162,23 @@ var App = function (_React$Component) {
 
       _reactedLink2.default.go('/step/' + step);
     }
+
+    // Pass data changes to socket server
+
   }, {
     key: 'changeHandler',
-    value: function changeHandler(domain, section, value) {
-      window.socket.emit('changeData', domain, section, value);
+    value: function changeHandler(domain, section, value, index) {
+      window.socket.emit('changeData', domain, section, value, index);
     }
+
+    // View
+
   }, {
     key: 'render',
     value: function render() {
       var user = this.props.user;
 
+      // If user not logged in, go to opt-in page
 
       if (!user) {
         return _react2.default.createElement(
