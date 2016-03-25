@@ -58,7 +58,56 @@ var _setCookie = require('./routes/set-cookie');
 
 var _setCookie2 = _interopRequireDefault(_setCookie);
 
+var _household = require('../data/household.json');
+
+var _household2 = _interopRequireDefault(_household);
+
+var _cars = require('../data/cars.json');
+
+var _cars2 = _interopRequireDefault(_cars);
+
+var _person = require('../data/person.json');
+
+var _person2 = _interopRequireDefault(_person);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function render(req, res, next) {
+  var source = '';
+
+  _fs2.default.createReadStream('index.html').on('error', next).on('data', function (data) {
+    source += data.toString();
+  }).on('end', function () {
+    source = source.replace(/window\.props = \{\};/, 'window.props = ' + JSON.stringify({
+      user: req.user,
+      path: req.path
+    }, null, 2) + ';');
+    res.send(source);
+  });
+}
+
+function identify(req, res, next) {
+  if (req.cookies.fullStack12345) {
+    _user2.default.find(req.cookies.fullStack12345).then(function (users) {
+      if (!users.length) {
+        return next(new Error('Cookie not matching any user'));
+      }
+
+      var _users = _slicedToArray(users, 1);
+
+      var user = _users[0];
+
+
+      req.user = user;
+
+      console.log({ user: user });
+
+      next();
+    }).catch(next);
+  } else {
+    next();
+  }
+}
 
 var server = new _expressEmitter2.default(function (app) {
 
@@ -81,28 +130,7 @@ var server = new _expressEmitter2.default(function (app) {
 
   // User
 
-  .get('/', function (req, res, next) {
-    if (req.cookies.fullStack12345) {
-      _user2.default.find(req.cookies.fullStack12345).then(function (users) {
-        if (!users.length) {
-          return next(new Error('Cookie not matching any user'));
-        }
-
-        var _users = _slicedToArray(users, 1);
-
-        var user = _users[0];
-
-
-        req.user = user;
-
-        console.log({ user: user });
-
-        next();
-      }).catch(next);
-    } else {
-      next();
-    }
-  })
+  .get('/', identify).get('/step/:step', identify)
 
   // Sign in
 
@@ -124,18 +152,11 @@ var server = new _expressEmitter2.default(function (app) {
 
   // Home page
 
-  .get('/', function (req, res, next) {
-    var source = '';
+  .get('/', render)
 
-    _fs2.default.createReadStream('index.html').on('error', next).on('data', function (data) {
-      source += data.toString();
-    }).on('end', function () {
-      source = source.replace(/window\.props = \{\};/, 'window.props = ' + JSON.stringify({
-        user: req.user
-      }, null, 2) + ';');
-      res.send(source);
-    });
-  })
+  // Home page with steps
+
+  .get('/step/:step', render)
 
   // Static assets
 
@@ -189,9 +210,8 @@ var server = new _expressEmitter2.default(function (app) {
       if (!socketUser) {
         rockets.users.push(Object.assign(user, {
           data: {
-            household: {
-              address: null
-            }
+            household: _household2.default,
+            persons: [_person2.default]
           }
         }));
       }

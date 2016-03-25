@@ -14,16 +14,10 @@ var _app2 = _interopRequireDefault(_app);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+// Connect client to Web Sockets Server
+
 window.socket = io.connect();
 
-// window.socket.on('user', user => {
-//   console.info(user);
-//   // props.user = user;
-//   // render();
-// });
+// Render React Component
 
-function render() {
-  _reactDom2.default.render(_react2.default.createElement(_app2.default, props), document.getElementById('wrapper'));
-}
-
-render();
+_reactDom2.default.render(_react2.default.createElement(_app2.default, props), document.getElementById('wrapper'));

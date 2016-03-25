@@ -16,6 +16,10 @@ var _superagent = require('superagent');
 
 var _superagent2 = _interopRequireDefault(_superagent);
 
+var _reactedLink = require('reacted-link');
+
+var _reactedLink2 = _interopRequireDefault(_reactedLink);
+
 var _topBar = require('./top-bar');
 
 var _topBar2 = _interopRequireDefault(_topBar);
@@ -44,6 +48,18 @@ var _summary = require('./summary');
 
 var _summary2 = _interopRequireDefault(_summary);
 
+var _household3 = require('../../data/household.json');
+
+var _household4 = _interopRequireDefault(_household3);
+
+var _person = require('../../data/person.json');
+
+var _person2 = _interopRequireDefault(_person);
+
+var _cars3 = require('../../data/cars.json');
+
+var _cars4 = _interopRequireDefault(_cars3);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -69,25 +85,27 @@ var steps = [{
 var App = function (_React$Component) {
   _inherits(App, _React$Component);
 
-  function App() {
-    var _Object$getPrototypeO;
-
-    var _temp, _this, _ret;
-
+  function App(props) {
     _classCallCheck(this, App);
 
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(App).call(this, props));
 
-    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(App)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.data = {
-      household: {
-        address: null
-      }
-    }, _this.state = {
+    _this.data = {
+      household: _household4.default,
+      persons: [_person2.default]
+    };
+    _this.state = {
       step: 0,
       changed: 0
-    }, _temp), _possibleConstructorReturn(_this, _ret);
+    };
+
+
+    var paths = _this.props.path.split(/\//);
+
+    if (paths[2]) {
+      _this.state.step = +paths[2];
+    }
+    return _this;
   }
 
   _createClass(App, [{
@@ -108,7 +126,7 @@ var App = function (_React$Component) {
       var next = step + 1;
 
       if (steps[next]) {
-        this.setState({ step: next });
+        this.stepHandler(next);
       }
     }
   }, {
@@ -119,6 +137,8 @@ var App = function (_React$Component) {
       }
 
       this.setState({ step: step });
+
+      _reactedLink2.default.go('/step/' + step);
     }
   }, {
     key: 'changeHandler',
@@ -171,16 +191,6 @@ var App = function (_React$Component) {
             'span',
             { className: 'label label-info' },
             steps[next].label
-          )
-        );
-      } else {
-        footer = _react2.default.createElement(
-          'div',
-          null,
-          _react2.default.createElement(
-            'button',
-            { className: 'btn btn-primary' },
-            'Submit'
           )
         );
       }

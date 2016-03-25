@@ -31,7 +31,7 @@ class Summary extends React.Component {
               </div>
 
               <div className="col-xs-8">
-                -ZIP code-
+                { household.zip }
               </div>
             </div>
 
@@ -41,7 +41,7 @@ class Summary extends React.Component {
               </div>
 
               <div className="col-xs-8">
-                -City-
+                { household.city }
               </div>
             </div>
 
@@ -51,7 +51,7 @@ class Summary extends React.Component {
               </div>
 
               <div className="col-xs-8">
-                -State-
+                { household.state }
               </div>
             </div>
 
@@ -61,7 +61,7 @@ class Summary extends React.Component {
               </div>
 
               <div className="col-xs-8">
-                -Bedrooms-
+                { household.number_of_bedrooms }
               </div>
             </div>
           </div>

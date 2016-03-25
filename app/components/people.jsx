@@ -2,14 +2,6 @@
 
 import React from 'react';
 
-const person = {
-  first_name : null,
-  last_name : null,
-  email : null,
-  age : null,
-  gender : null
-};
-
 class Person extends React.Component {
   render () {
     const { person, active } = this.props;
@@ -102,9 +94,17 @@ class Person extends React.Component {
 
 class People extends React.Component {
   state = {
-    people : [Object.assign({}, person)],
+    people : [],
     person : 0
   };
+
+  constructor (props) {
+    super(props);
+
+    console.log(this.props);
+
+    this.state.people = this.props.persons;
+  }
 
   addPerson () {
     const { people } = this.state;

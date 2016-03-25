@@ -81,7 +81,7 @@ var Summary = function (_React$Component) {
               _react2.default.createElement(
                 'div',
                 { className: 'col-xs-8' },
-                '-ZIP code-'
+                household.zip
               )
             ),
             _react2.default.createElement(
@@ -95,7 +95,7 @@ var Summary = function (_React$Component) {
               _react2.default.createElement(
                 'div',
                 { className: 'col-xs-8' },
-                '-City-'
+                household.city
               )
             ),
             _react2.default.createElement(
@@ -109,7 +109,7 @@ var Summary = function (_React$Component) {
               _react2.default.createElement(
                 'div',
                 { className: 'col-xs-8' },
-                '-State-'
+                household.state
               )
             ),
             _react2.default.createElement(
@@ -123,7 +123,7 @@ var Summary = function (_React$Component) {
               _react2.default.createElement(
                 'div',
                 { className: 'col-xs-8' },
-                '-Bedrooms-'
+                household.number_of_bedrooms
               )
             )
           )

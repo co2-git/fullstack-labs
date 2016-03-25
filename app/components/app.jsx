@@ -2,6 +2,7 @@
 
 import React              from 'react';
 import superagent         from 'superagent';
+import Link               from 'reacted-link';
 import TopBar             from './top-bar';
 import OptIn              from './opt-in';
 import StepBar            from './step-bar';
@@ -9,6 +10,9 @@ import HouseHold          from './household';
 import People             from './people';
 import Cars               from './cars';
 import Summary            from './summary';
+import household          from '../../data/household.json';
+import person             from '../../data/person.json';
+import cars               from '../../data/cars.json';
 
 const steps = [
   {
@@ -35,15 +39,24 @@ const steps = [
 class App extends React.Component {
 
   data = {
-    household : {
-      address : null
-    }
+    household,
+    persons : [person]
   };
 
   state = {
     step : 0,
     changed : 0
   };
+
+  constructor (props) {
+    super(props);
+
+    const paths = this.props.path.split(/\//);
+
+    if ( paths[2] ) {
+      this.state.step = +(paths[2]);
+    }
+  }
 
   componentDidMount () {
     window.socket.emit('getData', data => {
@@ -57,7 +70,7 @@ class App extends React.Component {
     const next = step + 1;
 
     if ( steps[next] ) {
-      this.setState({ step : next });
+      this.stepHandler(next);
     }
   }
 
@@ -67,6 +80,8 @@ class App extends React.Component {
     }
 
     this.setState({ step });
+
+    Link.go(`/step/${step}`);
   }
 
   changeHandler (domain, section, value) {
@@ -106,13 +121,6 @@ class App extends React.Component {
           </button>
           <span> </span>
           <span className="label label-info">{ steps[next].label }</span>
-        </div>
-      );
-    }
-    else {
-      footer = (
-        <div>
-          <button className="btn btn-primary">Submit</button>
         </div>
       );
     }

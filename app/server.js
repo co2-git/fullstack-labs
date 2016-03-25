@@ -17,6 +17,56 @@ import signIn             from './routes/sign-in';
 import signOut            from './routes/sign-out';
 import signUp             from './routes/sign-up';
 import setCookie          from './routes/set-cookie';
+import household          from '../data/household.json';
+import cars               from '../data/cars.json';
+import person             from '../data/person.json';
+
+function render (req, res, next) {
+  let source = '';
+
+  fs
+    .createReadStream('index.html')
+    .on('error', next)
+    .on('data', data => { source += data.toString() })
+    .on('end', () => {
+      source = source.replace(
+        /window\.props = \{\};/,
+        'window.props = ' + JSON.stringify(
+          {
+            user : req.user,
+            path : req.path
+          },
+          null,
+          2
+        ) + ';'
+      );
+      res.send(source);
+    })
+}
+
+function identify (req, res, next) {
+  if ( req.cookies.fullStack12345 ) {
+    User
+      .find(req.cookies.fullStack12345)
+      .then(users => {
+        if ( ! users.length ) {
+          return next(new Error('Cookie not matching any user'));
+        }
+
+        const [ user ] = users;
+
+        req.user = user;
+
+        console.log({ user });
+
+        next();
+      })
+      .catch(next);
+  }
+  else {
+    next();
+  }
+}
 
 const server = new Server(app => {
 
@@ -42,29 +92,9 @@ const server = new Server(app => {
 
     // User
 
-    .get('/', (req, res, next) => {
-      if ( req.cookies.fullStack12345 ) {
-        User
-          .find(req.cookies.fullStack12345)
-          .then(users => {
-            if ( ! users.length ) {
-              return next(new Error('Cookie not matching any user'));
-            }
+    .get('/', identify)
 
-            const [ user ] = users;
-
-            req.user = user;
-
-            console.log({ user });
-
-            next();
-          })
-          .catch(next);
-      }
-      else {
-        next();
-      }
-    })
+    .get('/step/:step', identify)
 
     // Sign in
 
@@ -90,27 +120,11 @@ const server = new Server(app => {
 
     // Home page
 
-    .get('/', (req, res, next) => {
-      let source = '';
+    .get('/', render)
 
-      fs
-        .createReadStream('index.html')
-        .on('error', next)
-        .on('data', data => { source += data.toString() })
-        .on('end', () => {
-          source = source.replace(
-            /window\.props = \{\};/,
-            'window.props = ' + JSON.stringify(
-              {
-                user : req.user
-              },
-              null,
-              2
-            ) + ';'
-          );
-          res.send(source);
-        })
-    })
+    // Home page with steps
+
+    .get('/step/:step', render)
 
     // Static assets
 
@@ -169,9 +183,8 @@ const server = new Server(app => {
             if ( ! socketUser ) {
               rockets.users.push(Object.assign(user, {
                 data : {
-                  household : {
-                    address : null
-                  }
+                  household,
+                  persons : [person]
                 }
               }));
             }

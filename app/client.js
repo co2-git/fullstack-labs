@@ -1,19 +1,13 @@
 'use strict';
 
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './components/app';
+import React          from 'react';
+import ReactDOM       from 'react-dom';
+import App            from './components/app';
+
+// Connect client to Web Sockets Server
 
 window.socket = io.connect();
 
-// window.socket.on('user', user => {
-//   console.info(user);
-//   // props.user = user;
-//   // render();
-// });
+// Render React Component
 
-function render () {
-  ReactDOM.render(<App { ...props } />, document.getElementById('wrapper'));
-}
-
-render ();
+ReactDOM.render(<App { ...props } />, document.getElementById('wrapper'));

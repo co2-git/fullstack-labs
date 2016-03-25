@@ -18,14 +18,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var person = {
-  first_name: null,
-  last_name: null,
-  email: null,
-  age: null,
-  gender: null
-};
-
 var Person = function (_React$Component) {
   _inherits(Person, _React$Component);
 
@@ -170,21 +162,21 @@ var Person = function (_React$Component) {
 var People = function (_React$Component2) {
   _inherits(People, _React$Component2);
 
-  function People() {
-    var _Object$getPrototypeO;
-
-    var _temp, _this2, _ret;
-
+  function People(props) {
     _classCallCheck(this, People);
 
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
+    var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(People).call(this, props));
 
-    return _ret = (_temp = (_this2 = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(People)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this2), _this2.state = {
-      people: [Object.assign({}, person)],
+    _this2.state = {
+      people: [],
       person: 0
-    }, _temp), _possibleConstructorReturn(_this2, _ret);
+    };
+
+
+    console.log(_this2.props);
+
+    _this2.state.people = _this2.props.persons;
+    return _this2;
   }
 
   _createClass(People, [{

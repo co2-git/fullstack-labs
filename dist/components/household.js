@@ -32,20 +32,30 @@ var HouseHold = function (_React$Component) {
   }
 
   _createClass(HouseHold, [{
-    key: 'updateHandler',
-    value: function updateHandler(section) {
-      var input = _reactDom2.default.findDOMNode(this.refs[section]);
-      this.props.onChange('household', section, input.value);
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.syncView();
     }
   }, {
     key: 'componentDidUpdate',
     value: function componentDidUpdate() {
+      this.syncView();
+    }
+  }, {
+    key: 'syncView',
+    value: function syncView() {
       var household = this.props.household;
 
 
       for (var section in household) {
         _reactDom2.default.findDOMNode(this.refs[section]).value = household[section];
       }
+    }
+  }, {
+    key: 'updateHandler',
+    value: function updateHandler(section) {
+      var input = _reactDom2.default.findDOMNode(this.refs[section]);
+      this.props.onChange('household', section, input.value);
     }
   }, {
     key: 'render',
@@ -91,8 +101,10 @@ var HouseHold = function (_React$Component) {
             _react2.default.createElement('input', {
               type: 'text',
               name: 'zip',
+              ref: 'zip',
               placeholder: 'Your ZIP code',
-              className: 'form-control'
+              className: 'form-control',
+              onChange: this.updateHandler.bind(this, 'zip')
             })
           )
         ),
@@ -110,8 +122,10 @@ var HouseHold = function (_React$Component) {
             _react2.default.createElement('input', {
               type: 'text',
               name: 'city',
+              ref: 'city',
               placeholder: 'Your city',
-              className: 'form-control'
+              className: 'form-control',
+              onChange: this.updateHandler.bind(this, 'city')
             })
           )
         ),
@@ -129,8 +143,10 @@ var HouseHold = function (_React$Component) {
             _react2.default.createElement('input', {
               type: 'text',
               name: 'state',
+              ref: 'state',
               placeholder: 'Your state',
-              className: 'form-control'
+              className: 'form-control',
+              onChange: this.updateHandler.bind(this, 'state')
             })
           )
         ),
@@ -151,8 +167,10 @@ var HouseHold = function (_React$Component) {
             _react2.default.createElement('input', {
               type: 'number',
               name: 'number_of_bedrooms',
+              ref: 'number_of_bedrooms',
               placeholder: 'Number of bedrooms',
-              className: 'form-control'
+              className: 'form-control',
+              onChange: this.updateHandler.bind(this, 'number_of_bedrooms')
             })
           )
         )
