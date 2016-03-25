@@ -198,9 +198,8 @@ var server = new _expressEmitter2.default(function (app) {
 
       next();
     }).catch(next);
-  })).use(function (socket, next) {
-    socket.emit('user', findSocketUser(socket.user));
-    next();
+  })).listen('getData', function (socket, cb) {
+    cb(findSocketUser(socket.user).data);
   }).listen('changeData', function (socket, domain, section, value) {
     var socketUser = findSocketUser(socket.user);
 

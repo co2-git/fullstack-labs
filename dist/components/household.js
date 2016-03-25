@@ -38,6 +38,16 @@ var HouseHold = function (_React$Component) {
       this.props.onChange('household', section, input.value);
     }
   }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+      var household = this.props.household;
+
+
+      for (var section in household) {
+        _reactDom2.default.findDOMNode(this.refs[section]).value = household[section];
+      }
+    }
+  }, {
     key: 'render',
     value: function render() {
       var household = this.props.household;
@@ -63,7 +73,6 @@ var HouseHold = function (_React$Component) {
               ref: 'address',
               placeholder: 'Your address',
               className: 'form-control',
-              defaultValue: household.address,
               onChange: this.updateHandler.bind(this, 'address')
             })
           )

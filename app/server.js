@@ -181,9 +181,8 @@ const server = new Server(app => {
           .catch(next);
       }))
 
-      .use((socket, next) => {
-        socket.emit('user', findSocketUser(socket.user));
-        next();
+      .listen('getData', (socket, cb) => {
+        cb(findSocketUser(socket.user).data);
       })
 
       .listen('changeData', (socket, domain, section, value) => {

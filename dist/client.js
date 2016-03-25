@@ -16,11 +16,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 window.socket = io.connect();
 
-window.socket.on('user', function (user) {
-  console.info(user);
-  // props.user = user;
-  // render();
-});
+// window.socket.on('user', user => {
+//   console.info(user);
+//   // props.user = user;
+//   // render();
+// });
 
 function render() {
   _reactDom2.default.render(_react2.default.createElement(_app2.default, props), document.getElementById('wrapper'));

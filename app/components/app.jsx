@@ -41,8 +41,16 @@ class App extends React.Component {
   };
 
   state = {
-    step : 0
+    step : 0,
+    changed : 0
   };
+
+  componentDidMount () {
+    window.socket.emit('getData', data => {
+      this.data = data;
+      this.setState({ changed : ++this.state.changed });
+    });
+  }
 
   nextHandler (e) {
     const { step } = this.state;

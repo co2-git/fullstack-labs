@@ -85,11 +85,22 @@ var App = function (_React$Component) {
         address: null
       }
     }, _this.state = {
-      step: 0
+      step: 0,
+      changed: 0
     }, _temp), _possibleConstructorReturn(_this, _ret);
   }
 
   _createClass(App, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      window.socket.emit('getData', function (data) {
+        _this2.data = data;
+        _this2.setState({ changed: ++_this2.state.changed });
+      });
+    }
+  }, {
     key: 'nextHandler',
     value: function nextHandler(e) {
       var step = this.state.step;

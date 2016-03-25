@@ -4,9 +4,18 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 class HouseHold extends React.Component {
+
   updateHandler (section) {
     const input = ReactDOM.findDOMNode(this.refs[section]);
     this.props.onChange('household', section, input.value);
+  }
+
+  componentDidUpdate() {
+    const { household } = this.props;
+
+    for ( const section in household ) {
+      ReactDOM.findDOMNode(this.refs[section]).value = household[section];
+    }
   }
 
   render () {
@@ -26,7 +35,6 @@ class HouseHold extends React.Component {
               ref             =   "address"
               placeholder     =   "Your address"
               className       =   "form-control"
-              defaultValue    =   { household.address }
               onChange        =   { this.updateHandler.bind(this, 'address') }
             />
           </div>
