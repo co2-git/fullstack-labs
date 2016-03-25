@@ -18,21 +18,40 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var People = function (_React$Component) {
-  _inherits(People, _React$Component);
+var person = {
+  first_name: null,
+  last_name: null,
+  email: null,
+  age: null,
+  gender: null
+};
 
-  function People() {
-    _classCallCheck(this, People);
+var Person = function (_React$Component) {
+  _inherits(Person, _React$Component);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(People).apply(this, arguments));
+  function Person() {
+    _classCallCheck(this, Person);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(Person).apply(this, arguments));
   }
 
-  _createClass(People, [{
+  _createClass(Person, [{
     key: 'render',
     value: function render() {
+      var _props = this.props;
+      var person = _props.person;
+      var active = _props.active;
+
+
+      var style = {};
+
+      if (!active) {
+        style.display = 'none';
+      }
+
       return _react2.default.createElement(
-        'form',
-        { className: 'form-horizontal' },
+        'div',
+        { style: style },
         _react2.default.createElement(
           'div',
           { className: 'form-group' },
@@ -140,6 +159,114 @@ var People = function (_React$Component) {
               )
             )
           )
+        )
+      );
+    }
+  }]);
+
+  return Person;
+}(_react2.default.Component);
+
+var People = function (_React$Component2) {
+  _inherits(People, _React$Component2);
+
+  function People() {
+    var _Object$getPrototypeO;
+
+    var _temp, _this2, _ret;
+
+    _classCallCheck(this, People);
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this2 = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(People)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this2), _this2.state = {
+      people: [Object.assign({}, person)],
+      person: 0
+    }, _temp), _possibleConstructorReturn(_this2, _ret);
+  }
+
+  _createClass(People, [{
+    key: 'addPerson',
+    value: function addPerson() {
+      var people = this.state.people;
+
+
+      people.push(Object.assign({}, person));
+
+      this.setState({ people: people, person: people.length - 1 });
+    }
+  }, {
+    key: 'viewPerson',
+    value: function viewPerson(person, e) {
+      e.preventDefault();
+
+      this.setState({ person: person });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this3 = this;
+
+      var people = this.state.people.map(function (people, index) {
+        if (index === _this3.state.person) {
+          return _react2.default.createElement(
+            'li',
+            { key: index, className: 'active' },
+            'Person #',
+            index + 1
+          );
+        } else {
+          return _react2.default.createElement(
+            'li',
+            { key: index },
+            _react2.default.createElement(
+              'a',
+              {
+                href: '#',
+                onClick: _this3.viewPerson.bind(_this3, index)
+              },
+              'Person #',
+              index + 1
+            )
+          );
+        }
+      });
+
+      var persons = this.state.people.map(function (people, index) {
+        return _react2.default.createElement(Person, {
+          person: people,
+          active: index === _this3.state.person,
+          key: index
+        });
+      });
+
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+          'ol',
+          { className: 'breadcrumb' },
+          people,
+          _react2.default.createElement(
+            'li',
+            null,
+            _react2.default.createElement(
+              'span',
+              {
+                className: 'badge',
+                onClick: this.addPerson.bind(this),
+                style: { cursor: 'pointer' }
+              },
+              '+'
+            )
+          )
+        ),
+        _react2.default.createElement(
+          'form',
+          { className: 'form-horizontal' },
+          persons
         )
       );
     }

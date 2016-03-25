@@ -2,10 +2,26 @@
 
 import React from 'react';
 
-class People extends React.Component {
+const person = {
+  first_name : null,
+  last_name : null,
+  email : null,
+  age : null,
+  gender : null
+};
+
+class Person extends React.Component {
   render () {
+    const { person, active } = this.props;
+
+    const style = {};
+
+    if ( ! active ) {
+      style.display = 'none';
+    }
+
     return (
-      <form className="form-horizontal">
+      <div style={ style }>
         <div className="form-group">
           <label htmlFor="first_name" className="col-xs-2 control-label">
             First name
@@ -79,7 +95,79 @@ class People extends React.Component {
             </div>
           </div>
         </div>
-      </form>
+      </div>
+    );
+  }
+}
+
+class People extends React.Component {
+  state = {
+    people : [Object.assign({}, person)],
+    person : 0
+  };
+
+  addPerson () {
+    const { people } = this.state;
+
+    people.push(Object.assign({}, person));
+
+    this.setState({ people, person : (people.length - 1) });
+  }
+
+  viewPerson (person, e) {
+    e.preventDefault();
+
+    this.setState({ person });
+  }
+
+  render () {
+    const people = this.state.people.map((people, index) => {
+      if ( index === this.state.person ) {
+        return (
+          <li key={ index } className="active">
+            Person #{ index + 1 }
+          </li>
+        );
+      }
+      else {
+        return (
+          <li key={ index }>
+            <a
+              href        =   "#"
+              onClick     =   { this.viewPerson.bind(this, index) }
+            >
+              Person #{ index + 1 }
+            </a>
+          </li>
+        );
+      }
+    });
+
+    const persons = this.state.people.map((people, index) => (
+      <Person
+        person            =   { people }
+        active            =   { index === this.state.person }
+        key               =   { index }
+      />
+    ));
+
+    return (
+      <div>
+        <ol className="breadcrumb">
+          { people }
+          <li>
+            <span
+              className       =   "badge"
+              onClick         =   { ::this.addPerson }
+              style           =   {{ cursor : 'pointer' }}
+            >+</span>
+          </li>
+        </ol>
+
+        <form className="form-horizontal">
+          { persons }
+        </form>
+      </div>
     );
   }
 }
