@@ -82,6 +82,7 @@ class Cars extends React.Component {
     const cars = this.state.cars.map((car, index) => (
       <Car
         car               =   { car }
+        persons           =   { this.props.persons }
         active            =   { index === this.state.car }
         key               =   { index }
         updateHandler     =   { ::this.updateHandler }

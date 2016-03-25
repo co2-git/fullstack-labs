@@ -166,7 +166,13 @@ const server = new Server(app => {
 
     const rockets = new WebRockets(server.server);
 
+    // The users
+
     rockets.users = [];
+
+    // Small ID system for DB
+
+    rockets.id = 0;
 
     const findSocketUser = user => {
       return rockets.users.reduce(
@@ -212,8 +218,8 @@ const server = new Server(app => {
               rockets.users.push(Object.assign(user, {
                 data : {
                   household,
-                  persons : [Object.assign({}, person)],
-                  cars : [Object.assign({}, car)]
+                  persons : [Object.assign({}, person, { id : rockets.id ++ })],
+                  cars : [Object.assign({}, car, { id : rockets.id ++ })]
                 }
               }));
             }
@@ -261,6 +267,8 @@ const server = new Server(app => {
             else if ( domain === 'cars' ) {
               socketUser.data[domain][index] = Object.assign({}, car);
             }
+
+            socketUser.data[domain][index].id = rockets.id++;
           }
 
           // update data

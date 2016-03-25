@@ -125,6 +125,7 @@ var Cars = function (_React$Component) {
       var cars = this.state.cars.map(function (car, index) {
         return _react2.default.createElement(_car2.default, {
           car: car,
+          persons: _this2.props.persons,
           active: index === _this2.state.car,
           key: index,
           updateHandler: _this2.updateHandler.bind(_this2),

@@ -50,6 +50,7 @@ var Car = function (_React$Component) {
       var _props = this.props;
       var car = _props.car;
       var active = _props.active;
+      var persons = _props.persons;
 
 
       var style = {};
@@ -57,6 +58,16 @@ var Car = function (_React$Component) {
       if (!active) {
         style.display = 'none';
       }
+
+      var owners = persons.map(function (person, index) {
+        return _react2.default.createElement(
+          'option',
+          { key: index, value: person.id },
+          person.first_name,
+          ' ',
+          person.last_name
+        );
+      });
 
       return _react2.default.createElement(
         'div',
@@ -126,6 +137,32 @@ var Car = function (_React$Component) {
               defaultValue: car.license_plate,
               ref: 'license_plate'
             })
+          )
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'form-group' },
+          _react2.default.createElement(
+            'label',
+            { htmlFor: 'license_plate', className: 'col-xs-2 control-label' },
+            'Owner'
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'col-xs-10' },
+            _react2.default.createElement(
+              'select',
+              {
+                type: 'text',
+                name: 'owner',
+                className: 'form-control',
+                onChange: this.changeHandler.bind(this, 'owner'),
+                defaultValue: car.owner,
+                ref: 'owner'
+              },
+              _react2.default.createElement('option', null),
+              owners
+            )
           )
         )
       );

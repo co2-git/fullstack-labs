@@ -66,45 +66,75 @@ class Summary extends React.Component {
       </div>
     ));
 
-    const carsPanel = cars.map((car, index) => (
-      <div className="panel panel-default" key={ index }>
-        <div className="panel-heading">
-          Car #{ index + 1 }
+    const carsPanel = cars.map((car, index) => {
+      let owner;
+
+      if ( car.owner ) {
+        owner = this.props.persons.reduce(
+          (owner, person) => {
+            if ( person.id === +(car.owner) ) {
+              owner = person;
+            }
+            return owner;
+          },
+          null
+        );
+
+        if ( owner ) {
+          owner = `${owner.first_name} ${owner.last_name}`;
+        }
+      }
+
+      return (
+        <div className="panel panel-default" key={ index }>
+          <div className="panel-heading">
+            Car #{ index + 1 }
+          </div>
+
+          <div className="panel-body">
+            <div className="row">
+              <div className="col-xs-4">
+                Model
+              </div>
+
+              <div className="col-xs-8">
+                { car.model }
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="col-xs-4">
+                Year
+              </div>
+
+              <div className="col-xs-8">
+                { car.year }
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="col-xs-4">
+                License plate
+              </div>
+
+              <div className="col-xs-8">
+                { car.license_plate }
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="col-xs-4">
+                Owner
+              </div>
+
+              <div className="col-xs-8">
+                { owner }
+              </div>
+            </div>
+          </div>
         </div>
-
-        <div className="panel-body">
-          <div className="row">
-            <div className="col-xs-4">
-              Model
-            </div>
-
-            <div className="col-xs-8">
-              { car.model }
-            </div>
-          </div>
-
-          <div className="row">
-            <div className="col-xs-4">
-              Year
-            </div>
-
-            <div className="col-xs-8">
-              { car.year }
-            </div>
-          </div>
-
-          <div className="row">
-            <div className="col-xs-4">
-              License plate
-            </div>
-
-            <div className="col-xs-8">
-              { car.license_plate }
-            </div>
-          </div>
-        </div>
-      </div>
-    ));
+      );
+    });
 
     return (
       <div>

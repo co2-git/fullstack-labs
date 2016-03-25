@@ -16,13 +16,19 @@ class Car extends React.Component {
   //----------------------------------------------------------------------------
 
   render () {
-    const { car, active } = this.props;
+    const { car, active, persons } = this.props;
 
     const style = {};
 
     if ( ! active ) {
       style.display = 'none';
     }
+
+    const owners = persons.map((person, index) => (
+      <option key={ index } value={ person.id }>
+        { person.first_name } { person.last_name }
+      </option>
+    ));
 
     return (
       <div style={ style }>
@@ -84,6 +90,28 @@ class Car extends React.Component {
               defaultValue    =   { car.license_plate }
               ref             =   "license_plate"
             />
+          </div>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="license_plate" className="col-xs-2 control-label">
+            Owner
+          </label>
+
+          <div className="col-xs-10">
+            <select
+              type            =   "text"
+              name            =   "owner"
+              className       =   "form-control"
+              onChange        =   {
+                this.changeHandler.bind(this, 'owner')
+              }
+              defaultValue    =   { car.owner }
+              ref             =   "owner"
+            >
+              <option></option>
+              { owners }
+            </select>
           </div>
         </div>
       </div>

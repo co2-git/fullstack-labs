@@ -30,6 +30,8 @@ var Summary = function (_React$Component) {
   _createClass(Summary, [{
     key: 'render',
     value: function render() {
+      var _this2 = this;
+
       var _props = this.props;
       var household = _props.household;
       var persons = _props.persons;
@@ -124,6 +126,21 @@ var Summary = function (_React$Component) {
       });
 
       var carsPanel = cars.map(function (car, index) {
+        var owner = void 0;
+
+        if (car.owner) {
+          owner = _this2.props.persons.reduce(function (owner, person) {
+            if (person.id === +car.owner) {
+              owner = person;
+            }
+            return owner;
+          }, null);
+
+          if (owner) {
+            owner = owner.first_name + ' ' + owner.last_name;
+          }
+        }
+
         return _react2.default.createElement(
           'div',
           { className: 'panel panel-default', key: index },
@@ -176,6 +193,20 @@ var Summary = function (_React$Component) {
                 'div',
                 { className: 'col-xs-8' },
                 car.license_plate
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'row' },
+              _react2.default.createElement(
+                'div',
+                { className: 'col-xs-4' },
+                'Owner'
+              ),
+              _react2.default.createElement(
+                'div',
+                { className: 'col-xs-8' },
+                owner
               )
             )
           )

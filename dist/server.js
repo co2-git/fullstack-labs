@@ -196,7 +196,13 @@ var server = new _expressEmitter2.default(function (app) {
 
   var rockets = new _webRockets2.default(server.server);
 
+  // The users
+
   rockets.users = [];
+
+  // Small ID system for DB
+
+  rockets.id = 0;
 
   var findSocketUser = function findSocketUser(user) {
     return rockets.users.reduce(function (match, socketUser) {
@@ -239,8 +245,8 @@ var server = new _expressEmitter2.default(function (app) {
         rockets.users.push(Object.assign(user, {
           data: {
             household: _household2.default,
-            persons: [Object.assign({}, _person2.default)],
-            cars: [Object.assign({}, _car2.default)]
+            persons: [Object.assign({}, _person2.default, { id: rockets.id++ })],
+            cars: [Object.assign({}, _car2.default, { id: rockets.id++ })]
           }
         }));
       }
@@ -285,6 +291,8 @@ var server = new _expressEmitter2.default(function (app) {
         } else if (domain === 'cars') {
           socketUser.data[domain][index] = Object.assign({}, _car2.default);
         }
+
+        socketUser.data[domain][index].id = rockets.id++;
       }
 
       // update data
