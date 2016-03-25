@@ -61,23 +61,28 @@ class App extends React.Component {
     }
   }
 
-  // Get user's data from sockets server
+  //----------------------------------------------------------------------------
 
   componentDidMount () {
     window.socket
 
+      // Get data
+
       .emit('getData', data => {
-        console.info('DATA', data);
         this.setState({ data : data });
       })
 
+      // Push changes
+
       .on('changedData', data => {
-        console.info('DATA', data);
         this.setState({ data : data });
       });
   }
 
-  // Move to next step
+  /** Next Handler - Move to next step
+   *
+   *  @arg {Event} e
+   */
 
   nextHandler (e) {
     const { step } = this.state;
@@ -88,7 +93,11 @@ class App extends React.Component {
     }
   }
 
-  // Update state + location with new step
+  /** Step Handler - Update state + location with new step
+   *
+   *  @arg {Number} step
+   *  @arg {Event} e
+   */
 
   stepHandler (step, e) {
     if ( e ) {
@@ -100,10 +109,22 @@ class App extends React.Component {
     Link.go(`/step/${step}`);
   }
 
-  // Pass data changes to socket server
+  /** Change Handler - Pass data changes to socket server
+   *
+   *  @arg {String} domain
+   *  @arg {String} section
+   *  @arg mixed value
+   *  @arg {Number} index
+   */
 
   changeHandler (domain, section, value, index) {
     window.socket.emit('changeData', domain, section, value, index);
+  }
+
+  // Save final changes
+
+  save () {
+    window.alert('Thank you!');
   }
 
   // View
@@ -142,6 +163,8 @@ class App extends React.Component {
 
     let footer;
 
+    // If next step, display link to next step
+
     if ( steps[next] ) {
       footer = (
         <div>
@@ -156,6 +179,96 @@ class App extends React.Component {
           <span className="label label-info">{ steps[next].label }</span>
         </div>
       );
+    }
+
+    // if no next step, show percentage of fields filled
+    // if all fields filled, offer option to save changes
+
+    else {
+      let total = 14;
+
+      total += (this.state.data.persons.length - 1) * 5;
+      total += (this.state.data.cars.length - 1) * 4;
+
+      let done = 0;
+
+      if ( this.state.data.household.address ) {
+        done ++;
+      }
+
+      if ( this.state.data.household.zip ) {
+        done ++;
+      }
+
+      if ( this.state.data.household.city ) {
+        done ++;
+      }
+
+      if ( this.state.data.household.state ) {
+        done ++;
+      }
+
+      if ( this.state.data.household.number_of_bedrooms ) {
+        done ++;
+      }
+
+      this.state.data.persons.forEach(person => {
+        if ( person.first_name ) {
+          done ++;
+        }
+
+        if ( person.last_name ) {
+          done ++;
+        }
+
+        if ( person.email ) {
+          done ++;
+        }
+
+        if ( person.age ) {
+          done ++;
+        }
+
+        if ( person.gender ) {
+          done ++;
+        }
+      });
+
+      this.state.data.cars.forEach(car => {
+        if ( car.model ) {
+          done ++;
+        }
+
+        if ( car.year ) {
+          done ++;
+        }
+
+        if ( car.license_plate ) {
+          done ++;
+        }
+
+        if ( car.owner ) {
+          done ++;
+        }
+      });
+
+      const percentage = done / total * 100;
+
+      if ( percentage === 100 ) {
+        footer = (
+          <button
+            className       =   "btn btn-primary"
+            onClick         =   { ::this.save }
+          >
+            Save changes
+          </button>
+        );
+      }
+      else {
+        footer = (
+          <div>{ Math.floor(percentage) }% done</div>
+        );
+      }
     }
 
     return (

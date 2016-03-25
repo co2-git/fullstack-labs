@@ -21,6 +21,16 @@ import household          from '../data/household.json';
 import car                from '../data/car.json';
 import person             from '../data/person.json';
 
+//------------------------------------------------------------------------------
+/** Render index
+ *
+ *  @arg {IncomingMessage} req
+ *  @arg {HttpResponse} res
+ *  @arg {Function} next
+ *  @return null
+ */
+//------------------------------------------------------------------------------
+
 function render (req, res, next) {
   let source = '';
 
@@ -43,6 +53,16 @@ function render (req, res, next) {
       res.send(source);
     })
 }
+
+//------------------------------------------------------------------------------
+/** Identify user in stack so front-end knows if user is logged in
+ *
+ *  @arg {IncomingMessage} req
+ *  @arg {HttpResponse} res
+ *  @arg {Function} next
+ *  @return null
+ */
+//------------------------------------------------------------------------------
 
 function identify (req, res, next) {
   if ( req.cookies.fullStack12345 ) {
@@ -67,6 +87,8 @@ function identify (req, res, next) {
     next();
   }
 }
+
+// The HTTP server
 
 const server = new Server(app => {
 
@@ -174,6 +196,12 @@ const server = new Server(app => {
 
     rockets.id = 0;
 
+    /** Find Socket User - Find a user by email
+     *
+     *  @arg {Object} user - the user from DB to compare with RAM users
+     *  @return {Object}
+     */
+
     const findSocketUser = user => {
       return rockets.users.reduce(
         (match, socketUser) => {
@@ -216,10 +244,11 @@ const server = new Server(app => {
 
             if ( ! socketUser ) {
               rockets.users.push(Object.assign(user, {
+                // Default data
                 data : {
                   household,
                   persons : [Object.assign({}, person, { id : rockets.id ++ })],
-                  cars : [Object.assign({}, car, { id : rockets.id ++ })]
+                  cars    : [Object.assign({}, car, { id : rockets.id ++ })]
                 }
               }));
             }
@@ -230,10 +259,6 @@ const server = new Server(app => {
       }))
 
       .use((socket, next) => {
-        console.log('-----------------------------------------------------');
-        console.log(require('util').inspect(rockets.users, { depth: null }));
-        console.log('-----------------------------------------------------');
-
         // catch errors
 
         socket.on('error', error => console.log(error.stack));
@@ -250,8 +275,6 @@ const server = new Server(app => {
 
       .listen('changeData', (socket, domain, section, value, index) => {
         const socketUser = findSocketUser(socket.user);
-
-        console.log('changeData', {domain, section, value, index})
 
         // if index is set, than data is an array
 
@@ -280,6 +303,7 @@ const server = new Server(app => {
           socketUser.data[domain][section] = value;
         }
 
+        // Emit back to client
         socket.emit('changedData', socketUser.data);
       });
   })

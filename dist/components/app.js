@@ -101,23 +101,32 @@ var App = function (_React$Component) {
     return _this;
   }
 
-  // Get user's data from sockets server
+  //----------------------------------------------------------------------------
 
   _createClass(App, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
       var _this2 = this;
 
-      window.socket.emit('getData', function (data) {
-        console.info('DATA', data);
+      window.socket
+
+      // Get data
+
+      .emit('getData', function (data) {
         _this2.setState({ data: data });
-      }).on('changedData', function (data) {
-        console.info('DATA', data);
+      })
+
+      // Push changes
+
+      .on('changedData', function (data) {
         _this2.setState({ data: data });
       });
     }
 
-    // Move to next step
+    /** Next Handler - Move to next step
+     *
+     *  @arg {Event} e
+     */
 
   }, {
     key: 'nextHandler',
@@ -131,7 +140,11 @@ var App = function (_React$Component) {
       }
     }
 
-    // Update state + location with new step
+    /** Step Handler - Update state + location with new step
+     *
+     *  @arg {Number} step
+     *  @arg {Event} e
+     */
 
   }, {
     key: 'stepHandler',
@@ -145,7 +158,13 @@ var App = function (_React$Component) {
       _reactedLink2.default.go('/step/' + step);
     }
 
-    // Pass data changes to socket server
+    /** Change Handler - Pass data changes to socket server
+     *
+     *  @arg {String} domain
+     *  @arg {String} section
+     *  @arg mixed value
+     *  @arg {Number} index
+     */
 
   }, {
     key: 'changeHandler',
@@ -153,11 +172,21 @@ var App = function (_React$Component) {
       window.socket.emit('changeData', domain, section, value, index);
     }
 
+    // Save final changes
+
+  }, {
+    key: 'save',
+    value: function save() {
+      window.alert('Thank you!');
+    }
+
     // View
 
   }, {
     key: 'render',
     value: function render() {
+      var _this3 = this;
+
       var user = this.props.user;
 
       // If user not logged in, go to opt-in page
@@ -195,6 +224,8 @@ var App = function (_React$Component) {
 
       var footer = void 0;
 
+      // If next step, display link to next step
+
       if (steps[next]) {
         footer = _react2.default.createElement(
           'div',
@@ -220,6 +251,100 @@ var App = function (_React$Component) {
           )
         );
       }
+
+      // if no next step, show percentage of fields filled
+      // if all fields filled, offer option to save changes
+
+      else {
+          (function () {
+            var total = 14;
+
+            total += (_this3.state.data.persons.length - 1) * 5;
+            total += (_this3.state.data.cars.length - 1) * 4;
+
+            var done = 0;
+
+            if (_this3.state.data.household.address) {
+              done++;
+            }
+
+            if (_this3.state.data.household.zip) {
+              done++;
+            }
+
+            if (_this3.state.data.household.city) {
+              done++;
+            }
+
+            if (_this3.state.data.household.state) {
+              done++;
+            }
+
+            if (_this3.state.data.household.number_of_bedrooms) {
+              done++;
+            }
+
+            _this3.state.data.persons.forEach(function (person) {
+              if (person.first_name) {
+                done++;
+              }
+
+              if (person.last_name) {
+                done++;
+              }
+
+              if (person.email) {
+                done++;
+              }
+
+              if (person.age) {
+                done++;
+              }
+
+              if (person.gender) {
+                done++;
+              }
+            });
+
+            _this3.state.data.cars.forEach(function (car) {
+              if (car.model) {
+                done++;
+              }
+
+              if (car.year) {
+                done++;
+              }
+
+              if (car.license_plate) {
+                done++;
+              }
+
+              if (car.owner) {
+                done++;
+              }
+            });
+
+            var percentage = done / total * 100;
+
+            if (percentage === 100) {
+              footer = _react2.default.createElement(
+                'button',
+                {
+                  className: 'btn btn-primary',
+                  onClick: _this3.save.bind(_this3)
+                },
+                'Save changes'
+              );
+            } else {
+              footer = _react2.default.createElement(
+                'div',
+                null,
+                Math.floor(percentage),
+                '% done'
+              );
+            }
+          })();
+        }
 
       return _react2.default.createElement(
         'div',

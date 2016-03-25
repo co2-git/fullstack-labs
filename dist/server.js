@@ -72,6 +72,16 @@ var _person2 = _interopRequireDefault(_person);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+//------------------------------------------------------------------------------
+/** Render index
+ *
+ *  @arg {IncomingMessage} req
+ *  @arg {HttpResponse} res
+ *  @arg {Function} next
+ *  @return null
+ */
+//------------------------------------------------------------------------------
+
 function render(req, res, next) {
   var source = '';
 
@@ -85,6 +95,16 @@ function render(req, res, next) {
     res.send(source);
   });
 }
+
+//------------------------------------------------------------------------------
+/** Identify user in stack so front-end knows if user is logged in
+ *
+ *  @arg {IncomingMessage} req
+ *  @arg {HttpResponse} res
+ *  @arg {Function} next
+ *  @return null
+ */
+//------------------------------------------------------------------------------
 
 function identify(req, res, next) {
   if (req.cookies.fullStack12345) {
@@ -108,6 +128,8 @@ function identify(req, res, next) {
     next();
   }
 }
+
+// The HTTP server
 
 var server = new _expressEmitter2.default(function (app) {
 
@@ -204,6 +226,12 @@ var server = new _expressEmitter2.default(function (app) {
 
   rockets.id = 0;
 
+  /** Find Socket User - Find a user by email
+   *
+   *  @arg {Object} user - the user from DB to compare with RAM users
+   *  @return {Object}
+   */
+
   var findSocketUser = function findSocketUser(user) {
     return rockets.users.reduce(function (match, socketUser) {
       if (socketUser.email === user.email) {
@@ -243,6 +271,7 @@ var server = new _expressEmitter2.default(function (app) {
 
       if (!socketUser) {
         rockets.users.push(Object.assign(user, {
+          // Default data
           data: {
             household: _household2.default,
             persons: [Object.assign({}, _person2.default, { id: rockets.id++ })],
@@ -254,10 +283,6 @@ var server = new _expressEmitter2.default(function (app) {
       next();
     }).catch(next);
   })).use(function (socket, next) {
-    console.log('-----------------------------------------------------');
-    console.log(require('util').inspect(rockets.users, { depth: null }));
-    console.log('-----------------------------------------------------');
-
     // catch errors
 
     socket.on('error', function (error) {
@@ -276,8 +301,6 @@ var server = new _expressEmitter2.default(function (app) {
 
   .listen('changeData', function (socket, domain, section, value, index) {
     var socketUser = findSocketUser(socket.user);
-
-    console.log('changeData', { domain: domain, section: section, value: value, index: index });
 
     // if index is set, than data is an array
 
@@ -302,6 +325,7 @@ var server = new _expressEmitter2.default(function (app) {
       socketUser.data[domain][section] = value;
     }
 
+    // Emit back to client
     socket.emit('changedData', socketUser.data);
   });
 })
