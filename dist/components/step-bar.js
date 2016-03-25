@@ -28,6 +28,12 @@ var StepBar = function (_React$Component) {
   }
 
   _createClass(StepBar, [{
+    key: 'stepHandler',
+    value: function stepHandler(step, e) {
+      e.preventDefault();
+      this.props.stepHandler(step);
+    }
+  }, {
     key: 'render',
     value: function render() {
       var _this2 = this;
@@ -52,7 +58,7 @@ var StepBar = function (_React$Component) {
           args,
           _react2.default.createElement(
             'a',
-            { href: '' },
+            { href: '#', onClick: _this2.stepHandler.bind(_this2, index) },
             _react2.default.createElement(
               'span',
               { className: 'badge' },

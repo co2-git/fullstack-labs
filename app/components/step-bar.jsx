@@ -3,6 +3,11 @@
 import React from 'react';
 
 class StepBar extends React.Component {
+  stepHandler (step, e) {
+    e.preventDefault();
+    this.props.stepHandler(step);
+  }
+
   render () {
     const { steps } = this.props;
 
@@ -20,7 +25,7 @@ class StepBar extends React.Component {
 
       return (
         <li { ...args }>
-          <a href="">
+          <a href="#" onClick={ this.stepHandler.bind(this, index) }>
             <span className="badge">{ stepIndex }</span>
             <span> { step.label }</span>
           </a>

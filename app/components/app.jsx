@@ -47,6 +47,14 @@ class App extends React.Component {
     }
   }
 
+  stepHandler (step, e) {
+    if ( e ) {
+      e.preventDefault();
+    }
+
+    this.setState({ step });
+  }
+
   render () {
     const { user } = this.props;
 
@@ -97,7 +105,11 @@ class App extends React.Component {
 
         <div className="container">
 
-          <StepBar steps={ steps } step={ step } />
+          <StepBar
+            steps         =   { steps }
+            step          =   { step }
+            stepHandler   =   { ::this.stepHandler }
+          />
 
           <div className="panel panel-default" style={{ margin : 80 }}>
             <div className="panel-heading">

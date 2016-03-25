@@ -95,6 +95,15 @@ var App = function (_React$Component) {
       }
     }
   }, {
+    key: 'stepHandler',
+    value: function stepHandler(step, e) {
+      if (e) {
+        e.preventDefault();
+      }
+
+      this.setState({ step: step });
+    }
+  }, {
     key: 'render',
     value: function render() {
       var user = this.props.user;
@@ -161,7 +170,11 @@ var App = function (_React$Component) {
         _react2.default.createElement(
           'div',
           { className: 'container' },
-          _react2.default.createElement(_stepBar2.default, { steps: steps, step: step }),
+          _react2.default.createElement(_stepBar2.default, {
+            steps: steps,
+            step: step,
+            stepHandler: this.stepHandler.bind(this)
+          }),
           _react2.default.createElement(
             'div',
             { className: 'panel panel-default', style: { margin: 80 } },
