@@ -62,9 +62,9 @@ var _household = require('../data/household.json');
 
 var _household2 = _interopRequireDefault(_household);
 
-var _cars = require('../data/cars.json');
+var _car = require('../data/car.json');
 
-var _cars2 = _interopRequireDefault(_cars);
+var _car2 = _interopRequireDefault(_car);
 
 var _person = require('../data/person.json');
 
@@ -116,49 +116,69 @@ var server = new _expressEmitter2.default(function (app) {
 
   app
 
+  //--------------------------------------------------------------------------
   // Port
+  //--------------------------------------------------------------------------
 
   .set('port', process.env.PORT || 3000)
 
+  //--------------------------------------------------------------------------
   // Cookie parser
+  //--------------------------------------------------------------------------
 
   .use((0, _cookieParser2.default)())
 
+  //--------------------------------------------------------------------------
   // Body parsers
+  //--------------------------------------------------------------------------
 
   .use(_bodyParser2.default.urlencoded({ extended: true }), _bodyParser2.default.json())
 
+  //--------------------------------------------------------------------------
   // User
+  //--------------------------------------------------------------------------
 
   .get('/', identify).get('/step/:step', identify)
 
+  //--------------------------------------------------------------------------
   // Sign in
+  //--------------------------------------------------------------------------
 
   .post('/sign-in', _signIn2.default, _setCookie2.default, function (req, res) {
     return res.send(req.user);
   })
 
+  //--------------------------------------------------------------------------
   // Sign up
+  //--------------------------------------------------------------------------
 
   .post('/sign-up', _signUp2.default, _setCookie2.default, function (req, res) {
     return res.send(req.user);
   })
 
+  //--------------------------------------------------------------------------
   // Sign out
+  //--------------------------------------------------------------------------
 
   .get('/sign-out', _signOut2.default, function (req, res) {
     return res.send({ out: true });
   })
 
+  //--------------------------------------------------------------------------
   // Home page
+  //--------------------------------------------------------------------------
 
   .get('/', render)
 
+  //--------------------------------------------------------------------------
   // Home page with steps
+  //--------------------------------------------------------------------------
 
   .get('/step/:step', render)
 
+  //--------------------------------------------------------------------------
   // Static assets
+  //--------------------------------------------------------------------------
 
   .use('/bower_components/', _express2.default.static('bower_components/')).use('/assets/', _express2.default.static('assets/'));
 })
@@ -219,7 +239,8 @@ var server = new _expressEmitter2.default(function (app) {
         rockets.users.push(Object.assign(user, {
           data: {
             household: _household2.default,
-            persons: [Object.assign({}, _person2.default)]
+            persons: [Object.assign({}, _person2.default)],
+            cars: [Object.assign({}, _car2.default)]
           }
         }));
       }
@@ -261,19 +282,19 @@ var server = new _expressEmitter2.default(function (app) {
       if (!socketUser.data[domain][index]) {
         if (domain === 'persons') {
           socketUser.data[domain][index] = Object.assign({}, _person2.default);
+        } else if (domain === 'cars') {
+          socketUser.data[domain][index] = Object.assign({}, _car2.default);
         }
       }
 
       // update data
 
       socketUser.data[domain][index][section] = value;
-
-      console.log('......................................');
-      console.log(socketUser.data[domain]);
-      console.log('......................................');
     } else {
       socketUser.data[domain][section] = value;
     }
+
+    socket.emit('changedData', socketUser.data);
   });
 })
 

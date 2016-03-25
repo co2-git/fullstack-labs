@@ -41,15 +41,15 @@ var Persons = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Persons).call(this, props));
 
     _this.state = {
-      // persons (from user's data)
-      people: [],
+      // persons
+      persons: [],
 
       // current person
       person: 0
     };
 
 
-    _this.state.people = _this.props.persons;
+    _this.state.persons = _this.props.persons;
     return _this;
   }
 
@@ -60,7 +60,7 @@ var Persons = function (_React$Component) {
   _createClass(Persons, [{
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(props) {
-      this.setState({ people: props.persons });
+      this.setState({ persons: props.persons });
     }
 
     // Add a new person
@@ -68,12 +68,12 @@ var Persons = function (_React$Component) {
   }, {
     key: 'addPerson',
     value: function addPerson() {
-      var people = this.state.people;
+      var persons = this.state.persons;
 
 
-      people.push(Object.assign({}, _person4.default));
+      persons.push(Object.assign({}, _person4.default));
 
-      this.setState({ people: people, person: people.length - 1 });
+      this.setState({ persons: persons, person: persons.length - 1 });
     }
 
     //----------------------------------------------------------------------------
@@ -101,7 +101,7 @@ var Persons = function (_React$Component) {
     value: function render() {
       var _this2 = this;
 
-      var people = this.state.people.map(function (people, index) {
+      var breadcrumb = this.state.persons.map(function (person, index) {
         if (index === _this2.state.person) {
           return _react2.default.createElement(
             'li',
@@ -126,9 +126,9 @@ var Persons = function (_React$Component) {
         }
       });
 
-      var persons = this.state.people.map(function (people, index) {
+      var persons = this.state.persons.map(function (person, index) {
         return _react2.default.createElement(_person2.default, {
-          person: people,
+          person: person,
           active: index === _this2.state.person,
           key: index,
           updateHandler: _this2.updateHandler.bind(_this2),
@@ -142,7 +142,7 @@ var Persons = function (_React$Component) {
         _react2.default.createElement(
           'ol',
           { className: 'breadcrumb' },
-          people,
+          breadcrumb,
           _react2.default.createElement(
             'li',
             null,

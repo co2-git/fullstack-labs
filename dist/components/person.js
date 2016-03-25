@@ -26,53 +26,14 @@ var Person = function (_React$Component) {
   _inherits(Person, _React$Component);
 
   function Person() {
-    var _Object$getPrototypeO;
-
-    var _temp, _this, _ret;
-
     _classCallCheck(this, Person);
 
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(Person)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.state = {
-      gender: null
-    }, _temp), _possibleConstructorReturn(_this, _ret);
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(Person).apply(this, arguments));
   }
 
   _createClass(Person, [{
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      this.syncView();
-    }
-  }, {
-    key: 'componentDidUpdate',
-    value: function componentDidUpdate() {
-      this.syncView();
-    }
-  }, {
-    key: 'componentWillReceiveProps',
-    value: function componentWillReceiveProps(props) {
-      this.setState({ gender: props.person.gender });
-    }
-  }, {
-    key: 'syncView',
-    value: function syncView() {
-      var person = this.props.person;
-
-
-      console.warn(person);
-
-      for (var section in person) {
-        if (section === 'gender') {} else {
-          _reactDom2.default.findDOMNode(this.refs[section]).value = person[section];
-        }
-      }
-    }
-  }, {
     key: 'changeHandler',
-    value: function changeHandler(section, value) {
+    value: function changeHandler(section, value, e) {
       var index = this.props.index;
 
 
@@ -81,10 +42,6 @@ var Person = function (_React$Component) {
       }
 
       this.props.updateHandler(section, value, index);
-
-      if (section === 'gender') {
-        this.setState({ gender: value });
-      }
     }
   }, {
     key: 'render',
@@ -101,9 +58,9 @@ var Person = function (_React$Component) {
       }
 
       var gender = {
-        male: this.state.gender === 'male' ? 'primary' : 'default',
-        female: this.state.gender === 'female' ? 'primary' : 'default',
-        other: this.state.gender === 'other' ? 'primary' : 'default'
+        male: person.gender === 'male' ? 'primary' : 'default',
+        female: person.gender === 'female' ? 'primary' : 'default',
+        other: person.gender === 'other' ? 'primary' : 'default'
       };
 
       return _react2.default.createElement(
@@ -126,7 +83,8 @@ var Person = function (_React$Component) {
               ref: 'first_name',
               placeholder: 'First name',
               className: 'form-control',
-              onChange: this.changeHandler.bind(this, 'first_name')
+              defaultValue: person.first_name,
+              onChange: this.changeHandler.bind(this, 'first_name', null)
             })
           )
         ),
@@ -147,7 +105,8 @@ var Person = function (_React$Component) {
               ref: 'last_name',
               placeholder: 'Last name',
               className: 'form-control',
-              onChange: this.changeHandler.bind(this, 'last_name')
+              defaultValue: person.last_name,
+              onChange: this.changeHandler.bind(this, 'last_name', null)
             })
           )
         ),
@@ -168,7 +127,8 @@ var Person = function (_React$Component) {
               ref: 'email',
               placeholder: 'Email',
               className: 'form-control',
-              onChange: this.changeHandler.bind(this, 'email')
+              defaultValue: person.email,
+              onChange: this.changeHandler.bind(this, 'email', null)
             })
           )
         ),
@@ -189,7 +149,8 @@ var Person = function (_React$Component) {
               ref: 'age',
               placeholder: 'Age',
               className: 'form-control',
-              onChange: this.changeHandler.bind(this, 'age')
+              defaultValue: person.age,
+              onChange: this.changeHandler.bind(this, 'age', null)
             })
           )
         ),
@@ -211,7 +172,8 @@ var Person = function (_React$Component) {
                 'button',
                 {
                   type: 'button',
-                  className: 'btn btn-' + gender.male,
+                  'data-gender': 'male',
+                  className: 'gender btn btn-' + gender.male,
                   onClick: this.changeHandler.bind(this, 'gender', 'male')
                 },
                 'Male'
@@ -220,7 +182,8 @@ var Person = function (_React$Component) {
                 'button',
                 {
                   type: 'button',
-                  className: 'btn btn-' + gender.female,
+                  'data-gender': 'female',
+                  className: 'gender btn btn-' + gender.female,
                   onClick: this.changeHandler.bind(this, 'gender', 'female')
                 },
                 'Female'
@@ -229,7 +192,8 @@ var Person = function (_React$Component) {
                 'button',
                 {
                   type: 'button',
-                  className: 'btn btn-' + gender.other,
+                  'data-gender': 'other',
+                  className: 'gender btn btn-' + gender.other,
                   onClick: this.changeHandler.bind(this, 'gender', 'other')
                 },
                 'Other'

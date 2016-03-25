@@ -34,7 +34,7 @@ class StepBar extends React.Component {
     });
 
     return (
-      <ul className="nav nav-pills" role="tablist">
+      <ul className="nav nav-pills" role="tablist" style={{ marginLeft : 50 }}>
         { content }
       </ul>
     );

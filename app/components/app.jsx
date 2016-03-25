@@ -14,9 +14,6 @@ import HouseHold          from './household';
 import Persons            from './persons';
 import Cars               from './cars';
 import Summary            from './summary';
-import household          from '../../data/household.json';
-import person             from '../../data/person.json';
-import cars               from '../../data/cars.json';
 
 // The steps
 
@@ -44,19 +41,10 @@ const steps = [
 
 class App extends React.Component {
 
-  // User data - handed by the socket server
-  // Data is detached from state because we use uncontrolled elements
-
-  data = {
-    household,
-    persons : [person]
-  };
-
   state = {
     // current step
     step      :   0,
-    // trigger state changes on data change
-    changed   :   0
+    data      :   null
   };
 
   // Constuctor
@@ -76,11 +64,17 @@ class App extends React.Component {
   // Get user's data from sockets server
 
   componentDidMount () {
-    window.socket.emit('getData', data => {
-      this.data = data;
-      console.log('got data from be', data);
-      this.setState({ changed : ++this.state.changed });
-    });
+    window.socket
+
+      .emit('getData', data => {
+        console.info('DATA', data);
+        this.setState({ data : data });
+      })
+
+      .on('changedData', data => {
+        console.info('DATA', data);
+        this.setState({ data : data });
+      });
   }
 
   // Move to next step
@@ -129,6 +123,17 @@ class App extends React.Component {
       );
     }
 
+    // if no data retrieved from back end, don't show nothing
+
+    if ( ! this.state.data ) {
+      return (
+        <div>
+          <TopBar user={ this.props.user } />
+          <div className="container">Loading data...</div>
+        </div>
+      );
+    }
+
     const { step } = this.state;
 
     const next = step + 1;
@@ -171,7 +176,7 @@ class App extends React.Component {
             </div>
 
             <div className="panel-body">
-              <View { ...this.data } onChange={ ::this.changeHandler } />
+              <View { ...this.state.data } onChange={ ::this.changeHandler } />
             </div>
 
             <div className="panel-footer text-right">

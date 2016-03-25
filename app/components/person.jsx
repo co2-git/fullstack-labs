@@ -5,38 +5,7 @@ import ReactDOM from 'react-dom';
 
 class Person extends React.Component {
 
-  state = {
-    gender : null
-  };
-
-  componentDidMount() {
-    this.syncView();
-  }
-
-  componentDidUpdate() {
-    this.syncView();
-  }
-
-  componentWillReceiveProps (props) {
-    this.setState({ gender : props.person.gender });
-  }
-
-  syncView () {
-    const { person } = this.props;
-
-    console.warn(person);
-
-    for ( const section in person ) {
-      if ( section === 'gender' ) {
-
-      }
-      else {
-        ReactDOM.findDOMNode(this.refs[section]).value = person[section];
-      }
-    }
-  }
-
-  changeHandler (section, value) {
+  changeHandler (section, value, e) {
     const { index } = this.props;
 
     if ( ! value ) {
@@ -44,10 +13,6 @@ class Person extends React.Component {
     }
 
     this.props.updateHandler(section, value, index);
-
-    if ( section === 'gender' ) {
-      this.setState({ gender : value });
-    }
   }
 
   render () {
@@ -60,9 +25,9 @@ class Person extends React.Component {
     }
 
     let gender = {
-      male    :   this.state.gender === 'male' ? 'primary' : 'default',
-      female  :   this.state.gender === 'female' ? 'primary' : 'default',
-      other   :   this.state.gender === 'other' ? 'primary' : 'default'
+      male    :   person.gender === 'male' ? 'primary' : 'default',
+      female  :   person.gender === 'female' ? 'primary' : 'default',
+      other   :   person.gender === 'other' ? 'primary' : 'default'
     };
 
     return (
@@ -79,8 +44,9 @@ class Person extends React.Component {
               ref             =   "first_name"
               placeholder     =   "First name"
               className       =   "form-control"
+              defaultValue    =   { person.first_name }
               onChange        =   {
-                this.changeHandler.bind(this, 'first_name')
+                this.changeHandler.bind(this, 'first_name', null)
               }
             />
           </div>
@@ -98,8 +64,9 @@ class Person extends React.Component {
               ref             =   "last_name"
               placeholder     =   "Last name"
               className       =   "form-control"
+              defaultValue    =   { person.last_name }
               onChange        =   {
-                this.changeHandler.bind(this, 'last_name')
+                this.changeHandler.bind(this, 'last_name', null)
               }
             />
           </div>
@@ -117,8 +84,9 @@ class Person extends React.Component {
               ref             =   "email"
               placeholder     =   "Email"
               className       =   "form-control"
+              defaultValue    =   { person.email }
               onChange        =   {
-                this.changeHandler.bind(this, 'email')
+                this.changeHandler.bind(this, 'email', null)
               }
             />
           </div>
@@ -136,8 +104,9 @@ class Person extends React.Component {
               ref             =   "age"
               placeholder     =   "Age"
               className       =   "form-control"
+              defaultValue    =   { person.age }
               onChange        =   {
-                this.changeHandler.bind(this, 'age')
+                this.changeHandler.bind(this, 'age', null)
               }
             />
           </div>
@@ -152,7 +121,8 @@ class Person extends React.Component {
             <div className="btn-group" role="group" aria-label="...">
               <button
                 type          =   "button"
-                className     =   { `btn btn-${gender.male}` }
+                data-gender   =   "male"
+                className     =   { `gender btn btn-${gender.male}` }
                 onClick       =   {
                   this.changeHandler.bind(this, 'gender', 'male')
                 }
@@ -162,7 +132,8 @@ class Person extends React.Component {
 
               <button
                 type          =   "button"
-                className     =   { `btn btn-${gender.female}` }
+                data-gender   =   "female"
+                className     =   { `gender btn btn-${gender.female}` }
                 onClick       =   {
                   this.changeHandler.bind(this, 'gender', 'female')
                 }
@@ -172,7 +143,8 @@ class Person extends React.Component {
 
               <button
                 type          =   "button"
-                className     =   { `btn btn-${gender.other}` }
+                data-gender   =   "other"
+                className     =   { `gender btn btn-${gender.other}` }
                 onClick       =   {
                   this.changeHandler.bind(this, 'gender', 'other')
                 }

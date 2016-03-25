@@ -52,18 +52,6 @@ var _summary = require('./summary');
 
 var _summary2 = _interopRequireDefault(_summary);
 
-var _household3 = require('../../data/household.json');
-
-var _household4 = _interopRequireDefault(_household3);
-
-var _person = require('../../data/person.json');
-
-var _person2 = _interopRequireDefault(_person);
-
-var _cars3 = require('../../data/cars.json');
-
-var _cars4 = _interopRequireDefault(_cars3);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -93,9 +81,6 @@ var App = function (_React$Component) {
 
   // Constuctor
 
-  // User data - handed by the socket server
-  // Data is detached from state because we use uncontrolled elements
-
   function App(props) {
     _classCallCheck(this, App);
 
@@ -103,15 +88,10 @@ var App = function (_React$Component) {
 
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(App).call(this, props));
 
-    _this.data = {
-      household: _household4.default,
-      persons: [_person2.default]
-    };
     _this.state = {
       // current step
       step: 0,
-      // trigger state changes on data change
-      changed: 0
+      data: null
     };
     var paths = _this.props.path.split(/\//);
 
@@ -129,9 +109,11 @@ var App = function (_React$Component) {
       var _this2 = this;
 
       window.socket.emit('getData', function (data) {
-        _this2.data = data;
-        console.log('got data from be', data);
-        _this2.setState({ changed: ++_this2.state.changed });
+        console.info('DATA', data);
+        _this2.setState({ data: data });
+      }).on('changedData', function (data) {
+        console.info('DATA', data);
+        _this2.setState({ data: data });
       });
     }
 
@@ -186,6 +168,21 @@ var App = function (_React$Component) {
           null,
           _react2.default.createElement(_topBar2.default, { user: this.props.user }),
           _react2.default.createElement(_optIn2.default, { user: this.props.user })
+        );
+      }
+
+      // if no data retrieved from back end, don't show nothing
+
+      if (!this.state.data) {
+        return _react2.default.createElement(
+          'div',
+          null,
+          _react2.default.createElement(_topBar2.default, { user: this.props.user }),
+          _react2.default.createElement(
+            'div',
+            { className: 'container' },
+            'Loading data...'
+          )
         );
       }
 
@@ -253,7 +250,7 @@ var App = function (_React$Component) {
             _react2.default.createElement(
               'div',
               { className: 'panel-body' },
-              _react2.default.createElement(View, _extends({}, this.data, { onChange: this.changeHandler.bind(this) }))
+              _react2.default.createElement(View, _extends({}, this.state.data, { onChange: this.changeHandler.bind(this) }))
             ),
             _react2.default.createElement(
               'div',

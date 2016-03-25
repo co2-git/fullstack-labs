@@ -10,8 +10,8 @@ class Persons extends React.Component {
   //----------------------------------------------------------------------------
 
   state = {
-    // persons (from user's data)
-    people : [],
+    // persons
+    persons : [],
 
     // current person
     person : 0
@@ -22,23 +22,23 @@ class Persons extends React.Component {
   constructor (props) {
     super(props);
 
-    this.state.people = this.props.persons;
+    this.state.persons = this.props.persons;
   }
 
   //----------------------------------------------------------------------------
 
   componentWillReceiveProps (props) {
-    this.setState({ people : props.persons });
+    this.setState({ persons : props.persons });
   }
 
   // Add a new person
 
   addPerson () {
-    const { people } = this.state;
+    const { persons } = this.state;
 
-    people.push(Object.assign({}, person));
+    persons.push(Object.assign({}, person));
 
-    this.setState({ people, person : (people.length - 1) });
+    this.setState({ persons, person : (persons.length - 1) });
   }
 
   //----------------------------------------------------------------------------
@@ -58,7 +58,7 @@ class Persons extends React.Component {
   //----------------------------------------------------------------------------
 
   render () {
-    const people = this.state.people.map((people, index) => {
+    const breadcrumb = this.state.persons.map((person, index) => {
       if ( index === this.state.person ) {
         return (
           <li key={ index } className="active">
@@ -80,9 +80,9 @@ class Persons extends React.Component {
       }
     });
 
-    const persons = this.state.people.map((people, index) => (
+    const persons = this.state.persons.map((person, index) => (
       <Person
-        person            =   { people }
+        person            =   { person }
         active            =   { index === this.state.person }
         key               =   { index }
         updateHandler     =   { ::this.updateHandler }
@@ -93,7 +93,7 @@ class Persons extends React.Component {
     return (
       <div>
         <ol className="breadcrumb">
-          { people }
+          { breadcrumb }
           <li>
             <span
               className       =   "badge"

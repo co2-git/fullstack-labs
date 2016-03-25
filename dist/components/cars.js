@@ -10,6 +10,14 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _car = require('./car');
+
+var _car2 = _interopRequireDefault(_car);
+
+var _car3 = require('../../data/car.json');
+
+var _car4 = _interopRequireDefault(_car3);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -21,75 +29,134 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Cars = function (_React$Component) {
   _inherits(Cars, _React$Component);
 
-  function Cars() {
+  //----------------------------------------------------------------------------
+
+  function Cars(props) {
     _classCallCheck(this, Cars);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(Cars).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Cars).call(this, props));
+
+    _this.state = {
+      // cars
+      cars: [],
+
+      // current car
+      car: 0
+    };
+
+
+    _this.state.cars = _this.props.cars;
+    return _this;
   }
 
+  //----------------------------------------------------------------------------
+
+  //----------------------------------------------------------------------------
+
   _createClass(Cars, [{
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(props) {
+      this.setState({ cars: props.cars });
+    }
+
+    // Add a new car
+
+  }, {
+    key: 'addCar',
+    value: function addCar() {
+      var cars = this.state.cars;
+
+
+      cars.push(Object.assign({}, _car4.default));
+
+      this.setState({ cars: cars, car: cars.length - 1 });
+    }
+
+    //----------------------------------------------------------------------------
+
+  }, {
+    key: 'viewCar',
+    value: function viewCar(car, e) {
+      e.preventDefault();
+
+      this.setState({ car: car });
+    }
+
+    //----------------------------------------------------------------------------
+
+  }, {
+    key: 'updateHandler',
+    value: function updateHandler(section, value, index) {
+      this.props.onChange('cars', section, value, index);
+    }
+
+    //----------------------------------------------------------------------------
+
+  }, {
     key: 'render',
     value: function render() {
+      var _this2 = this;
+
+      var breadcrumb = this.state.cars.map(function (car, index) {
+        if (index === _this2.state.car) {
+          return _react2.default.createElement(
+            'li',
+            { key: index, className: 'active' },
+            'Car #',
+            index + 1
+          );
+        } else {
+          return _react2.default.createElement(
+            'li',
+            { key: index },
+            _react2.default.createElement(
+              'a',
+              {
+                href: '#',
+                onClick: _this2.viewCar.bind(_this2, index)
+              },
+              'Car #',
+              index + 1
+            )
+          );
+        }
+      });
+
+      var cars = this.state.cars.map(function (car, index) {
+        return _react2.default.createElement(_car2.default, {
+          car: car,
+          active: index === _this2.state.car,
+          key: index,
+          updateHandler: _this2.updateHandler.bind(_this2),
+          index: index
+        });
+      });
+
       return _react2.default.createElement(
-        'form',
-        { className: 'form-horizontal' },
+        'div',
+        null,
         _react2.default.createElement(
-          'div',
-          { className: 'form-group' },
+          'ol',
+          { className: 'breadcrumb' },
+          breadcrumb,
           _react2.default.createElement(
-            'label',
-            { htmlFor: 'model', className: 'col-xs-2 control-label' },
-            'Model'
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'col-xs-10' },
-            _react2.default.createElement('input', {
-              type: 'text',
-              name: 'model',
-              placeholder: 'Car\'s model',
-              className: 'form-control'
-            })
+            'li',
+            null,
+            _react2.default.createElement(
+              'span',
+              {
+                className: 'badge',
+                onClick: this.addCar.bind(this),
+                style: { cursor: 'pointer' }
+              },
+              '+'
+            )
           )
         ),
         _react2.default.createElement(
-          'div',
-          { className: 'form-group' },
-          _react2.default.createElement(
-            'label',
-            { htmlFor: 'year', className: 'col-xs-2 control-label' },
-            'Year'
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'col-xs-10' },
-            _react2.default.createElement('input', {
-              type: 'number',
-              name: 'year',
-              placeholder: 'Year',
-              className: 'form-control',
-              defaultValue: '2015'
-            })
-          )
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'form-group' },
-          _react2.default.createElement(
-            'label',
-            { htmlFor: 'license_plate', className: 'col-xs-2 control-label' },
-            'License plate'
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'col-xs-10' },
-            _react2.default.createElement('input', {
-              type: 'text',
-              name: 'license_plate',
-              placeholder: 'License plate',
-              className: 'form-control'
-            })
-          )
+          'form',
+          { className: 'form-horizontal' },
+          cars
         )
       );
     }

@@ -18,7 +18,7 @@ import signOut            from './routes/sign-out';
 import signUp             from './routes/sign-up';
 import setCookie          from './routes/set-cookie';
 import household          from '../data/household.json';
-import cars               from '../data/cars.json';
+import car                from '../data/car.json';
 import person             from '../data/person.json';
 
 function render (req, res, next) {
@@ -75,28 +75,38 @@ const server = new Server(app => {
 
   app
 
+    //--------------------------------------------------------------------------
     // Port
+    //--------------------------------------------------------------------------
 
     .set('port', process.env.PORT || 3000)
 
+    //--------------------------------------------------------------------------
     // Cookie parser
+    //--------------------------------------------------------------------------
 
     .use(cookieParser())
 
+    //--------------------------------------------------------------------------
     // Body parsers
+    //--------------------------------------------------------------------------
 
     .use(
       bodyParser.urlencoded({ extended: true }),
       bodyParser.json()
     )
 
+    //--------------------------------------------------------------------------
     // User
+    //--------------------------------------------------------------------------
 
     .get('/', identify)
 
     .get('/step/:step', identify)
 
+    //--------------------------------------------------------------------------
     // Sign in
+    //--------------------------------------------------------------------------
 
     .post(
       '/sign-in',
@@ -105,7 +115,9 @@ const server = new Server(app => {
       (req, res) => res.send(req.user)
     )
 
+    //--------------------------------------------------------------------------
     // Sign up
+    //--------------------------------------------------------------------------
 
     .post(
       '/sign-up',
@@ -114,19 +126,27 @@ const server = new Server(app => {
       (req, res) => res.send(req.user)
     )
 
+    //--------------------------------------------------------------------------
     // Sign out
+    //--------------------------------------------------------------------------
 
     .get('/sign-out', signOut, (req, res) => res.send({ out : true }))
 
+    //--------------------------------------------------------------------------
     // Home page
+    //--------------------------------------------------------------------------
 
     .get('/', render)
 
+    //--------------------------------------------------------------------------
     // Home page with steps
+    //--------------------------------------------------------------------------
 
     .get('/step/:step', render)
 
+    //--------------------------------------------------------------------------
     // Static assets
+    //--------------------------------------------------------------------------
 
     .use('/bower_components/', express.static('bower_components/'))
 
@@ -192,7 +212,8 @@ const server = new Server(app => {
               rockets.users.push(Object.assign(user, {
                 data : {
                   household,
-                  persons : [Object.assign({}, person)]
+                  persons : [Object.assign({}, person)],
+                  cars : [Object.assign({}, car)]
                 }
               }));
             }
@@ -236,20 +257,22 @@ const server = new Server(app => {
             if ( domain === 'persons' ) {
               socketUser.data[domain][index] = Object.assign({}, person);
             }
+
+            else if ( domain === 'cars' ) {
+              socketUser.data[domain][index] = Object.assign({}, car);
+            }
           }
 
           // update data
 
           socketUser.data[domain][index][section] = value;
-
-          console.log('......................................')
-          console.log(socketUser.data[domain]);
-          console.log('......................................')
         }
 
         else {
           socketUser.data[domain][section] = value;
         }
+
+        socket.emit('changedData', socketUser.data);
       });
   })
 

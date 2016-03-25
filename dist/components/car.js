@@ -22,49 +22,64 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var HouseHold = function (_React$Component) {
-  _inherits(HouseHold, _React$Component);
+var Car = function (_React$Component) {
+  _inherits(Car, _React$Component);
 
-  function HouseHold() {
-    _classCallCheck(this, HouseHold);
+  function Car() {
+    _classCallCheck(this, Car);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(HouseHold).apply(this, arguments));
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(Car).apply(this, arguments));
   }
 
-  _createClass(HouseHold, [{
-    key: 'updateHandler',
-    value: function updateHandler(section) {
-      var input = _reactDom2.default.findDOMNode(this.refs[section]);
-      this.props.onChange('household', section, input.value);
+  _createClass(Car, [{
+    key: 'changeHandler',
+    value: function changeHandler(section) {
+      var index = this.props.index;
+
+
+      var value = _reactDom2.default.findDOMNode(this.refs[section]).value;
+
+      this.props.updateHandler(section, value, index);
     }
+
+    //----------------------------------------------------------------------------
+
   }, {
     key: 'render',
     value: function render() {
-      var household = this.props.household;
+      var _props = this.props;
+      var car = _props.car;
+      var active = _props.active;
 
+
+      var style = {};
+
+      if (!active) {
+        style.display = 'none';
+      }
 
       return _react2.default.createElement(
-        'form',
-        { className: 'form-horizontal' },
+        'div',
+        { style: style },
         _react2.default.createElement(
           'div',
           { className: 'form-group' },
           _react2.default.createElement(
             'label',
-            { htmlFor: 'address', className: 'col-xs-2 control-label' },
-            'Address'
+            { htmlFor: 'model', className: 'col-xs-2 control-label' },
+            'Model'
           ),
           _react2.default.createElement(
             'div',
             { className: 'col-xs-10' },
             _react2.default.createElement('input', {
               type: 'text',
-              name: 'address',
-              ref: 'address',
-              placeholder: 'Your address',
+              name: 'model',
+              placeholder: 'Car\'s model',
               className: 'form-control',
-              defaultValue: household.address,
-              onChange: this.updateHandler.bind(this, 'address')
+              ref: 'model',
+              onChange: this.changeHandler.bind(this, 'model'),
+              defaultValue: car.model
             })
           )
         ),
@@ -73,89 +88,43 @@ var HouseHold = function (_React$Component) {
           { className: 'form-group' },
           _react2.default.createElement(
             'label',
-            { htmlFor: 'zip', className: 'col-xs-2 control-label' },
-            'ZIP Code'
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'col-xs-10' },
-            _react2.default.createElement('input', {
-              type: 'text',
-              name: 'zip',
-              ref: 'zip',
-              placeholder: 'Your ZIP code',
-              className: 'form-control',
-              defaultValue: household.zip,
-              onChange: this.updateHandler.bind(this, 'zip')
-            })
-          )
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'form-group' },
-          _react2.default.createElement(
-            'label',
-            { htmlFor: 'city', className: 'col-xs-2 control-label' },
-            'City'
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'col-xs-10' },
-            _react2.default.createElement('input', {
-              type: 'text',
-              name: 'city',
-              ref: 'city',
-              placeholder: 'Your city',
-              className: 'form-control',
-              defaultValue: household.city,
-              onChange: this.updateHandler.bind(this, 'city')
-            })
-          )
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'form-group' },
-          _react2.default.createElement(
-            'label',
-            { htmlFor: 'state', className: 'col-xs-2 control-label' },
-            'State'
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'col-xs-10' },
-            _react2.default.createElement('input', {
-              type: 'text',
-              name: 'state',
-              ref: 'state',
-              placeholder: 'Your state',
-              defaultValue: household.state,
-              className: 'form-control',
-              onChange: this.updateHandler.bind(this, 'state')
-            })
-          )
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'form-group' },
-          _react2.default.createElement(
-            'label',
-            {
-              htmlFor: 'number_of_bedrooms',
-              className: 'col-xs-2 control-label'
-            },
-            'Bedrooms'
+            { htmlFor: 'year', className: 'col-xs-2 control-label' },
+            'Year'
           ),
           _react2.default.createElement(
             'div',
             { className: 'col-xs-10' },
             _react2.default.createElement('input', {
               type: 'number',
-              name: 'number_of_bedrooms',
-              ref: 'number_of_bedrooms',
-              placeholder: 'Number of bedrooms',
-              defaultValue: household.number_of_bedrooms,
+              max: '2016',
+              name: 'year',
+              ref: 'year',
+              placeholder: 'Year',
               className: 'form-control',
-              onChange: this.updateHandler.bind(this, 'number_of_bedrooms')
+              onChange: this.changeHandler.bind(this, 'year'),
+              defaultValue: car.year
+            })
+          )
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'form-group' },
+          _react2.default.createElement(
+            'label',
+            { htmlFor: 'license_plate', className: 'col-xs-2 control-label' },
+            'License plate'
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'col-xs-10' },
+            _react2.default.createElement('input', {
+              type: 'text',
+              name: 'license_plate',
+              placeholder: 'License plate',
+              className: 'form-control',
+              onChange: this.changeHandler.bind(this, 'license_plate'),
+              defaultValue: car.license_plate,
+              ref: 'license_plate'
             })
           )
         )
@@ -163,7 +132,7 @@ var HouseHold = function (_React$Component) {
     }
   }]);
 
-  return HouseHold;
+  return Car;
 }(_react2.default.Component);
 
-exports.default = HouseHold;
+exports.default = Car;

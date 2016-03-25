@@ -76,7 +76,7 @@ var StepBar = function (_React$Component) {
 
       return _react2.default.createElement(
         'ul',
-        { className: 'nav nav-pills', role: 'tablist' },
+        { className: 'nav nav-pills', role: 'tablist', style: { marginLeft: 50 } },
         content
       );
     }

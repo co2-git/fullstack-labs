@@ -30,8 +30,157 @@ var Summary = function (_React$Component) {
   _createClass(Summary, [{
     key: 'render',
     value: function render() {
-      var household = this.props.household;
+      var _props = this.props;
+      var household = _props.household;
+      var persons = _props.persons;
+      var cars = _props.cars;
 
+
+      var personsPanel = persons.map(function (person, index) {
+        return _react2.default.createElement(
+          'div',
+          { className: 'panel panel-default', key: index },
+          _react2.default.createElement(
+            'div',
+            { className: 'panel-heading' },
+            'Person #',
+            index + 1
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'panel-body' },
+            _react2.default.createElement(
+              'div',
+              { className: 'row' },
+              _react2.default.createElement(
+                'div',
+                { className: 'col-xs-4' },
+                'First name'
+              ),
+              _react2.default.createElement(
+                'div',
+                { className: 'col-xs-8' },
+                person.first_name
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'row' },
+              _react2.default.createElement(
+                'div',
+                { className: 'col-xs-4' },
+                'Last name'
+              ),
+              _react2.default.createElement(
+                'div',
+                { className: 'col-xs-8' },
+                person.last_name
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'row' },
+              _react2.default.createElement(
+                'div',
+                { className: 'col-xs-4' },
+                'Email'
+              ),
+              _react2.default.createElement(
+                'div',
+                { className: 'col-xs-8' },
+                person.email
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'row' },
+              _react2.default.createElement(
+                'div',
+                { className: 'col-xs-4' },
+                'Age'
+              ),
+              _react2.default.createElement(
+                'div',
+                { className: 'col-xs-8' },
+                person.age
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'row' },
+              _react2.default.createElement(
+                'div',
+                { className: 'col-xs-4' },
+                'Gender'
+              ),
+              _react2.default.createElement(
+                'div',
+                { className: 'col-xs-8' },
+                person.gender
+              )
+            )
+          )
+        );
+      });
+
+      var carsPanel = cars.map(function (car, index) {
+        return _react2.default.createElement(
+          'div',
+          { className: 'panel panel-default', key: index },
+          _react2.default.createElement(
+            'div',
+            { className: 'panel-heading' },
+            'Car #',
+            index + 1
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'panel-body' },
+            _react2.default.createElement(
+              'div',
+              { className: 'row' },
+              _react2.default.createElement(
+                'div',
+                { className: 'col-xs-4' },
+                'Model'
+              ),
+              _react2.default.createElement(
+                'div',
+                { className: 'col-xs-8' },
+                car.model
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'row' },
+              _react2.default.createElement(
+                'div',
+                { className: 'col-xs-4' },
+                'Year'
+              ),
+              _react2.default.createElement(
+                'div',
+                { className: 'col-xs-8' },
+                car.year
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'row' },
+              _react2.default.createElement(
+                'div',
+                { className: 'col-xs-4' },
+                'License plate'
+              ),
+              _react2.default.createElement(
+                'div',
+                { className: 'col-xs-8' },
+                car.license_plate
+              )
+            )
+          )
+        );
+      });
 
       return _react2.default.createElement(
         'div',
@@ -145,7 +294,34 @@ var Summary = function (_React$Component) {
               ' People in your household'
             )
           ),
-          _react2.default.createElement('div', { className: 'panel-body' })
+          _react2.default.createElement(
+            'div',
+            { className: 'panel-body' },
+            personsPanel
+          )
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'panel panel-default' },
+          _react2.default.createElement(
+            'div',
+            { className: 'panel-heading' },
+            _react2.default.createElement(
+              'span',
+              { className: 'badge' },
+              '3'
+            ),
+            _react2.default.createElement(
+              'span',
+              null,
+              ' Your cars'
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'panel-body' },
+            carsPanel
+          )
         )
       );
     }
