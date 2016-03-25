@@ -30,6 +30,7 @@ npm start
 - `webpack` For compiling assets
 - `bootstrap` For UI
 - `React` for Front-End
+- `Sockets.io` for duplex communication client/server + RAM DB
 
 # Note
 
