@@ -22,6 +22,10 @@ var _people = require('./people');
 
 var _people2 = _interopRequireDefault(_people);
 
+var _cars = require('./cars');
+
+var _cars2 = _interopRequireDefault(_cars);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -37,7 +41,8 @@ var steps = [{
   label: 'People in your household',
   view: _people2.default
 }, {
-  label: 'Your cars'
+  label: 'Your cars',
+  view: _cars2.default
 }, {
   label: 'Summary'
 }];

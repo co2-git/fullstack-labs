@@ -4,6 +4,7 @@ import React              from 'react';
 import StepBar            from './step-bar';
 import HouseHold          from './household';
 import People             from './people';
+import Cars               from './cars';
 
 const steps = [
   {
@@ -17,7 +18,8 @@ const steps = [
   },
 
   {
-    label : 'Your cars'
+    label : 'Your cars',
+    view : Cars
   },
 
   {
