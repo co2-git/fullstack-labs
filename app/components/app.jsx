@@ -1,10 +1,14 @@
 'use strict';
 
 import React              from 'react';
+import superagent         from 'superagent';
+import TopBar             from './top-bar';
+import OptIn              from './opt-in';
 import StepBar            from './step-bar';
 import HouseHold          from './household';
 import People             from './people';
 import Cars               from './cars';
+import Summary            from './summary';
 
 const steps = [
   {
@@ -23,7 +27,8 @@ const steps = [
   },
 
   {
-    label : 'Summary'
+    label : 'Summary',
+    view : Summary
   }
 ];
 
@@ -43,6 +48,18 @@ class App extends React.Component {
   }
 
   render () {
+    const { user } = this.props;
+
+    if ( ! user ) {
+      return (
+        <div>
+          <TopBar user={ this.props.user } />
+
+          <OptIn user={ this.props.user } />
+        </div>
+      );
+    }
+
     const { step } = this.state;
 
     const next = step + 1;
@@ -66,22 +83,35 @@ class App extends React.Component {
         </div>
       );
     }
+    else {
+      footer = (
+        <div>
+          <button className="btn btn-primary">Submit</button>
+        </div>
+      );
+    }
 
     return (
       <div>
-        <StepBar steps={ steps } step={ step } />
+        <TopBar user={ this.props.user } />
 
-        <div className="panel panel-default" style={{ margin : 80 }}>
-          <div className="panel-heading">
-            <span className="badge">{ next }</span> { steps[step].label }
-          </div>
+        <div className="container">
 
-          <div className="panel-body">
-            <View />
-          </div>
+          <StepBar steps={ steps } step={ step } />
 
-          <div className="panel-footer text-right">
-            { footer }
+          <div className="panel panel-default" style={{ margin : 80 }}>
+            <div className="panel-heading">
+              <span className="badge">{ next }</span> { steps[step].label }
+            </div>
+
+            <div className="panel-body">
+              <View />
+            </div>
+
+            <div className="panel-footer text-right">
+              { footer }
+            </div>
+
           </div>
         </div>
       </div>

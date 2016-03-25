@@ -14,4 +14,4 @@ var _app2 = _interopRequireDefault(_app);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_reactDom2.default.render(_react2.default.createElement(_app2.default, null), document.getElementById('wrapper'));
+_reactDom2.default.render(_react2.default.createElement(_app2.default, props), document.getElementById('wrapper'));

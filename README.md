@@ -45,6 +45,12 @@ We use Bower to handle assets management.
 
 Also for simplicity reasons, we use the full version of Bootstrap instead of using a custom build.
 
+# Auth
+
+## Database
+
+I've put up a small database system for users. It stores users in `/User.json`.
+
 ===
 
 For this code challenge you will be building a web application with a simple set of features.  You can build the application using the following combinations of technologies.  You must choose one of the following from each level of the stack. (i.e Rails/Ember/Bootstrap).  You can include other technologies that you think will be useful to you but this will factor into our assessment of the overall project as well.

@@ -10,6 +10,18 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _superagent = require('superagent');
+
+var _superagent2 = _interopRequireDefault(_superagent);
+
+var _topBar = require('./top-bar');
+
+var _topBar2 = _interopRequireDefault(_topBar);
+
+var _optIn = require('./opt-in');
+
+var _optIn2 = _interopRequireDefault(_optIn);
+
 var _stepBar = require('./step-bar');
 
 var _stepBar2 = _interopRequireDefault(_stepBar);
@@ -25,6 +37,10 @@ var _people2 = _interopRequireDefault(_people);
 var _cars = require('./cars');
 
 var _cars2 = _interopRequireDefault(_cars);
+
+var _summary = require('./summary');
+
+var _summary2 = _interopRequireDefault(_summary);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -44,7 +60,8 @@ var steps = [{
   label: 'Your cars',
   view: _cars2.default
 }, {
-  label: 'Summary'
+  label: 'Summary',
+  view: _summary2.default
 }];
 
 var App = function (_React$Component) {
@@ -80,6 +97,18 @@ var App = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
+      var user = this.props.user;
+
+
+      if (!user) {
+        return _react2.default.createElement(
+          'div',
+          null,
+          _react2.default.createElement(_topBar2.default, { user: this.props.user }),
+          _react2.default.createElement(_optIn2.default, { user: this.props.user })
+        );
+      }
+
       var step = this.state.step;
 
 
@@ -113,35 +142,50 @@ var App = function (_React$Component) {
             steps[next].label
           )
         );
+      } else {
+        footer = _react2.default.createElement(
+          'div',
+          null,
+          _react2.default.createElement(
+            'button',
+            { className: 'btn btn-primary' },
+            'Submit'
+          )
+        );
       }
 
       return _react2.default.createElement(
         'div',
         null,
-        _react2.default.createElement(_stepBar2.default, { steps: steps, step: step }),
+        _react2.default.createElement(_topBar2.default, { user: this.props.user }),
         _react2.default.createElement(
           'div',
-          { className: 'panel panel-default', style: { margin: 80 } },
+          { className: 'container' },
+          _react2.default.createElement(_stepBar2.default, { steps: steps, step: step }),
           _react2.default.createElement(
             'div',
-            { className: 'panel-heading' },
+            { className: 'panel panel-default', style: { margin: 80 } },
             _react2.default.createElement(
-              'span',
-              { className: 'badge' },
-              next
+              'div',
+              { className: 'panel-heading' },
+              _react2.default.createElement(
+                'span',
+                { className: 'badge' },
+                next
+              ),
+              ' ',
+              steps[step].label
             ),
-            ' ',
-            steps[step].label
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'panel-body' },
-            _react2.default.createElement(View, null)
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'panel-footer text-right' },
-            footer
+            _react2.default.createElement(
+              'div',
+              { className: 'panel-body' },
+              _react2.default.createElement(View, null)
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'panel-footer text-right' },
+              footer
+            )
           )
         )
       );
